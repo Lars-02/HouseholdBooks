@@ -38,6 +38,22 @@
   gap: 8px;
 }
 
+.balance-form {
+  justify-content: space-between;
+  margin: 20px 0;
+}
+
+.input {
+  flex-grow: 1;
+}
+
+.form-row {
+  display: flex;
+  flex-direction: row;
+  width: 100%;
+  gap: 8px;
+}
+
 .ng-valid[required], .ng-valid.required {
   border-left: 5px solid #42A948; /* green */
 }

@@ -101,6 +101,7 @@ export class ProjectDetailComponent implements OnInit, OnDestroy {
         category: null,
       },
     });
+    this.form.reset()
   }
 
   async balanceChange(balance: Balance) {

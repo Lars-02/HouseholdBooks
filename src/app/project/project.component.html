@@ -12,6 +12,7 @@
         <input [id]="project.$id"
                type="text"
                [(ngModel)]="project.data.name"
+               autocomplete="off"
                (change)="projectChange(project)">
         <div *ngIf="project.$id && !project.data.archived"
              [routerLink]="'project/' + project.$id"
