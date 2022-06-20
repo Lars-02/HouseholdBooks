@@ -5,8 +5,8 @@
              type="text"
              [(ngModel)]="project.data.name"
              (change)="projectChange(project)">
-      <div [routerLink]="'project/' + project.$id" class="link">Go to project</div>
+      <div *ngIf="project.$id" [routerLink]="'project/' + project.$id" class="link">Go to project</div>
     </div>
-    <button (click)="projectService.addProject()">Add project</button>
+    <button [disabled]="canAdd()" (click)="projectService.addProject()">Add project</button>
   </div>
 </ng-container>

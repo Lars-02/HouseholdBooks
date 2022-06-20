@@ -1,10 +1,14 @@
 <div *ngIf="project">
   <div class="header">
+    <div class="pointer back" routerLink="/">
+      <i class="fa-solid fa-arrow-left fa-lg"></i>
+      <span>Back</span>
+    </div>
     <div class="name">
       <ng-container *ngIf="!editName; else editNameInput">
         <h2>{{ project.data.name }}</h2>
         <div class="pointer" (click)="editName = true">
-          <i class="fa-solid fa-pen"></i>
+          <i class="fa-solid fa-pen fa-lg"></i>
         </div>
       </ng-container>
       <ng-template #editNameInput>
@@ -12,13 +16,13 @@
                [(ngModel)]="project.data.name"
                (change)="projectService.saveProject(project); editName = false">
         <div class="pointer" (click)="editName = false">
-          <i class="fa-solid fa-xmark"></i>
+          <i class="fa-solid fa-xmark fa-lg"></i>
         </div>
       </ng-template>
     </div>
     <div class="options">
       <div class="pointer" (click)="delete()">
-        <i class="fa-solid fa-trash"></i>
+        <i class="fa-solid fa-trash fa-lg"></i>
       </div>
     </div>
   </div>

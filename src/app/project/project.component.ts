@@ -13,4 +13,10 @@ export class ProjectComponent {
   async projectChange(project: Project) {
     await this.projectService.saveProject(project);
   }
+
+  canAdd() {
+    return this.projectService.projects.some(project => {
+      return !project.$id;
+    });
+  }
 }

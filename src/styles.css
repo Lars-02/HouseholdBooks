@@ -47,7 +47,7 @@ button {
   transition: background-color 200ms;
 }
 
-button:hover {
+button:hover:not(:disabled) {
   background-color: #9CA3AF;
 }
 
