@@ -14,3 +14,10 @@
   color: cornflowerblue;
   cursor: pointer;
 }
+
+.options {
+  display: flex;
+  justify-content: end;
+  align-items: center;
+  margin: 20px 0
+}

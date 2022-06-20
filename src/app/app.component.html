@@ -1,6 +1,9 @@
 <nav>
   <h1>Huishoud boekje</h1>
-  <button *ngIf="auth.user" (click)="auth.logout()">Logout</button>
+  <div *ngIf="auth.user" class="account">
+    <span>{{ auth.user.email }}</span>
+    <button (click)="auth.logout()">Logout</button>
+  </div>
 </nav>
 <div>
   <router-outlet></router-outlet>

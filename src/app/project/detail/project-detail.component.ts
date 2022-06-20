@@ -23,10 +23,15 @@ export class ProjectDetailComponent implements OnInit, OnDestroy {
     if (!this.project) {
       this.subscriptions.push(this.projectService.projectsChanged.subscribe(async () => {
         this.project = this.projectService.getProject(id);
-        if (!this.project) {
+        if (!this.project || this.project.data.archived) {
           await this.router.navigateByUrl("/");
         }
       }));
+      return;
+    }
+
+    if (this.project.data.archived) {
+      await this.router.navigateByUrl("/");
     }
   }
 
@@ -37,9 +42,18 @@ export class ProjectDetailComponent implements OnInit, OnDestroy {
     }
   }
 
+  async archive() {
+    if (this.project) {
+      this.project.data.archived = true;
+      await this.projectService.saveProject(this.project);
+      await this.router.navigateByUrl("/");
+    }
+  }
+
   ngOnDestroy(): void {
     for (const subscription of this.subscriptions) {
       subscription.unsubscribe();
     }
   }
+
 }

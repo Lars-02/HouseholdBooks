@@ -8,6 +8,8 @@ import { Project, ProjectService } from "../service/project.service";
 })
 export class ProjectComponent {
 
+  public showArchived: boolean = false;
+
   constructor(public projectService: ProjectService) { }
 
   async projectChange(project: Project) {
@@ -17,6 +19,12 @@ export class ProjectComponent {
   canAdd() {
     return this.projectService.projects.some(project => {
       return !project.$id;
+    });
+  }
+
+  archiveExists() {
+    return this.projectService.projects.some(project => {
+      return project.data.archived;
     });
   }
 }

@@ -1,12 +1,30 @@
 <ng-container>
+  <div *ngIf="archiveExists()" class="options">
+    <button (click)="showArchived = !showArchived">
+      <div *ngIf="!showArchived">Show archived</div>
+      <div *ngIf="showArchived">Hide archived</div>
+    </button>
+  </div>
   <div class="projects">
-    <div *ngFor="let project of projectService.projects; let i = index" class="project">
-      <input [id]="project.$id"
-             type="text"
-             [(ngModel)]="project.data.name"
-             (change)="projectChange(project)">
-      <div *ngIf="project.$id" [routerLink]="'project/' + project.$id" class="link">Go to project</div>
-    </div>
-    <button [disabled]="canAdd()" (click)="projectService.addProject()">Add project</button>
+    <ng-container *ngFor="let project of projectService.projects; let i = index">
+      <div *ngIf="(!showArchived && !project.data.archived) || (showArchived && project.data.archived)"
+           class="project">
+        <input [id]="project.$id"
+               type="text"
+               [(ngModel)]="project.data.name"
+               (change)="projectChange(project)">
+        <div *ngIf="project.$id && !project.data.archived"
+             [routerLink]="'project/' + project.$id"
+             class="link">Go to project
+        </div>
+        <div *ngIf="project.data.archived"
+             (click)="project.data.archived = false; projectService.saveProject(project)"
+             class="link">Unarchive
+        </div>
+      </div>
+    </ng-container>
+    <button *ngIf="!showArchived" [disabled]="canAdd()" (click)="projectService.addProject()">
+      Add project
+    </button>
   </div>
 </ng-container>

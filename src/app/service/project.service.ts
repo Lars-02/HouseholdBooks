@@ -8,6 +8,7 @@ export interface Project {
   $id?: string;
   data: {
     name: string;
+    archived: boolean;
     description?: string;
   };
 }
@@ -16,9 +17,6 @@ export interface Project {
   providedIn: "root",
 })
 export class ProjectService {
-
-  private readonly ref = ref(this.database.db, "projects");
-
   public projects: Project[] = [];
   public projectsChanged: Subject<void> = new Subject();
 
@@ -27,7 +25,7 @@ export class ProjectService {
       if (!user) {
         return;
       }
-      onValue(this.ref, (snapshot => {
+      onValue(ref(this.database.db, "projects/" + user.uid), (snapshot => {
         this.projects = [];
         snapshot.forEach(child => {
           this.projects.push({
@@ -43,19 +41,30 @@ export class ProjectService {
   }
 
   addProject() {
-    this.projects.push({ data: { name: "" } });
+    const user = getAuth().currentUser;
+    if (user) {
+      this.projects.push({ data: { name: "", archived: false } });
+    }
   }
 
   async saveProject(project: Project) {
+    const user = getAuth().currentUser;
+    if (!user) {
+      return;
+    }
     if (project.$id) {
-      await set(ref(this.database.db, "projects/" + project.$id), project.data);
+      await set(ref(this.database.db, "projects/" + user.uid + "/" + project.$id), project.data);
     } else {
-      push(this.ref, project.data);
+      push(ref(this.database.db, "projects/" + user.uid), project.data);
     }
   }
 
   async deleteProject(project: Project) {
-    await remove(ref(this.database.db, "projects/" + project.$id));
+    const user = getAuth().currentUser;
+    if (!user) {
+      return;
+    }
+    await remove(ref(this.database.db, "projects/" + user.uid + "/" + project.$id));
   }
 
   getProject(id: string | null): Project | undefined {
