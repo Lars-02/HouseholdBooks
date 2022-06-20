@@ -74,6 +74,8 @@
       </form>
       <ng-container *ngIf="balanceService.balances">
         <div *ngFor="let balance of balanceService.balances" class="balance">
+          <span>{{ balance.data.label }}</span>
+          <div class="amount" [ngClass]="{ negative: (balance.data.amount ?? 0) < 0 }">{{ balance.data.amount }}</div>
         </div>
       </ng-container>
     </div>

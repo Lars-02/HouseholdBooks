@@ -2,10 +2,22 @@ nav {
   display: flex;
   justify-content: space-between;
   align-items: center;
+  margin: 0 20px;
 }
 
 .account {
   display: flex;
   align-items: center;
   gap: 4px;
+}
+
+.content {
+  display: flex;
+  justify-content: center;
+  margin: 0 40px;
+}
+
+.content > div {
+  width: 100%;
+  max-width: 1024px;
 }
