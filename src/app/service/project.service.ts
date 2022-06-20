@@ -8,6 +8,7 @@ export interface Project {
   $id?: string;
   data: {
     name: string;
+    description?: string;
   };
 }
 

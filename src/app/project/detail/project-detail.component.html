@@ -21,4 +21,10 @@
     </div>
   </div>
 
+  <div>
+    <input
+      type="text"
+      [(ngModel)]="project.data.description"
+      (change)="projectService.saveProject(project)">
+  </div>
 </div>
