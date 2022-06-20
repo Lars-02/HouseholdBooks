@@ -8,10 +8,12 @@
         </div>
       </ng-container>
       <ng-template #editNameInput>
-        <input *ngIf="editName"
-               type="text"
+        <input type="text"
                [(ngModel)]="project.data.name"
                (change)="projectService.saveProject(project); editName = false">
+        <div class="pointer" (click)="editName = false">
+          <i class="fa-solid fa-xmark"></i>
+        </div>
       </ng-template>
     </div>
     <div class="options">
@@ -22,9 +24,14 @@
   </div>
 
   <div>
-    <input
-      type="text"
-      [(ngModel)]="project.data.description"
-      (change)="projectService.saveProject(project)">
+    <div class="input">
+      <label for="description">Description</label>
+      <textarea
+        id="description"
+        type="text"
+        [(ngModel)]="project.data.description"
+        (change)="projectService.saveProject(project)">
+        </textarea>
+    </div>
   </div>
 </div>

@@ -1,6 +1,7 @@
 .header {
   display: flex;
   justify-content: space-between;
+  align-items: center;
 }
 
 .name {
@@ -11,4 +12,10 @@
 
 .pointer {
   cursor: pointer;
+}
+
+.input {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
 }
