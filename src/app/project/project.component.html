@@ -1,0 +1,12 @@
+<ng-container>
+  <div class="projects">
+    <div *ngFor="let project of projectService.projects; let i = index" class="project">
+      <input [id]="project.$id"
+             type="text"
+             [(ngModel)]="project.data.name"
+             (change)="projectChange(project)">
+      <div [routerLink]="'project/' + project.$id" class="link">Go to project</div>
+    </div>
+    <button (click)="projectService.addProject()">Add project</button>
+  </div>
+</ng-container>

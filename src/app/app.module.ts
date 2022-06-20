@@ -1,16 +1,35 @@
-import { NgModule } from '@angular/core';
-import { BrowserModule } from '@angular/platform-browser';
-
-import { AppComponent } from './app.component';
+import { NgModule } from "@angular/core";
+import { BrowserModule } from "@angular/platform-browser";
+import { AppComponent } from "./app.component";
+import { LoginComponent } from "./login/login.component";
+import { routing } from "./app.route";
+import { FormsModule, ReactiveFormsModule } from "@angular/forms";
+import { RegisterComponent } from "./register/register.component";
+import { AuthFormComponent } from "./auth-form/auth-form.component";
+import { ProjectComponent } from "./project/project.component";
+import { AuthService } from "./service/auth.service";
+import { DatabaseService } from "./service/database.service";
+import { ProjectDetailComponent } from './project/detail/project-detail.component';
 
 @NgModule({
   declarations: [
-    AppComponent
+    AppComponent,
+    LoginComponent,
+    AuthFormComponent,
+    RegisterComponent,
+    ProjectComponent,
+    ProjectDetailComponent,
+  ],
+  exports: [
+    AuthFormComponent,
   ],
   imports: [
-    BrowserModule
+    BrowserModule,
+    routing,
+    ReactiveFormsModule,
+    FormsModule,
   ],
-  providers: [],
-  bootstrap: [AppComponent]
+  providers: [AuthService, DatabaseService],
+  bootstrap: [AppComponent],
 })
-export class AppModule { }
+export class AppModule {}

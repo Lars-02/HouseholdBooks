@@ -1,0 +1,42 @@
+<form *ngIf="form" [formGroup]="form"
+      (ngSubmit)="form.valid && submit && submit({ email: email?.value, password: password?.value })"
+      class="form">
+  <div class="input">
+    <label for="email">Email</label>
+    <input
+      id="email"
+      type="text"
+      class="form-control"
+      formControlName="email"
+      required>
+  </div>
+  <div class="errors">
+    <div *ngIf="email?.dirty && email?.errors?.['required']">
+      Email is required.
+    </div>
+    <div *ngIf="email?.dirty && email?.errors?.['email']">
+      This field must contain a valid email
+    </div>
+  </div>
+
+  <div class="input">
+    <label for="password">Password</label>
+    <input
+      id="password"
+      type="text"
+      class="form-control"
+      formControlName="password"
+      max="24"
+      required>
+  </div>
+  <div class="errors">
+    <div *ngIf="password?.dirty && password?.errors?.['required']">
+      Password is required.
+    </div>
+    <div *ngIf="password?.dirty && password?.errors?.['minLength']">
+      The password must at least contain 8 characters
+    </div>
+  </div>
+
+  <ng-content></ng-content>
+</form>
