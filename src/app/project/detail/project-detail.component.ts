@@ -11,9 +11,10 @@ import { Subscription } from "rxjs";
 export class ProjectDetailComponent implements OnInit, OnDestroy {
 
   private subscriptions: Subscription[] = [];
+  public editName: boolean = false;
   public project?: Project;
 
-  constructor(private projectService: ProjectService, private route: ActivatedRoute, private router: Router) { }
+  constructor(public projectService: ProjectService, private route: ActivatedRoute, private router: Router) { }
 
   async ngOnInit() {
     const id = this.route.snapshot.paramMap.get("projectId");
@@ -26,6 +27,13 @@ export class ProjectDetailComponent implements OnInit, OnDestroy {
           await this.router.navigateByUrl("/");
         }
       }));
+    }
+  }
+
+  async delete() {
+    if (this.project) {
+      await this.projectService.deleteProject(this.project);
+      await this.router.navigateByUrl("/");
     }
   }
 

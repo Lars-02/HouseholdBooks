@@ -1,7 +1,24 @@
 <div *ngIf="project">
   <div class="header">
-    <h1>{{ project.data.name }}</h1>
-    <i class="fa-solid fa-pen 7xl"></i>
+    <div class="name">
+      <ng-container *ngIf="!editName; else editNameInput">
+        <h2>{{ project.data.name }}</h2>
+        <div class="pointer" (click)="editName = true">
+          <i class="fa-solid fa-pen"></i>
+        </div>
+      </ng-container>
+      <ng-template #editNameInput>
+        <input *ngIf="editName"
+               type="text"
+               [(ngModel)]="project.data.name"
+               (change)="projectService.saveProject(project); editName = false">
+      </ng-template>
+    </div>
+    <div class="options">
+      <div class="pointer" (click)="delete()">
+        <i class="fa-solid fa-trash"></i>
+      </div>
+    </div>
   </div>
 
 </div>

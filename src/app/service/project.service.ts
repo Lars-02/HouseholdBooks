@@ -1,6 +1,6 @@
 import { Injectable } from "@angular/core";
 import { DatabaseService } from "./database.service";
-import { onValue, push, ref, set } from "firebase/database";
+import { onValue, push, ref, set, remove } from "firebase/database";
 import { Subject } from "rxjs";
 import { getAuth, onAuthStateChanged } from "firebase/auth";
 
@@ -53,6 +53,10 @@ export class ProjectService {
     }
   }
 
+  async deleteProject(project: Project) {
+    await remove(ref(this.database.db, "projects/" + project.$id));
+  }
+
   getProject(id: string | null): Project | undefined {
     if (!id) { return undefined; }
 
@@ -60,4 +64,5 @@ export class ProjectService {
       return project.$id === id;
     });
   }
+
 }
