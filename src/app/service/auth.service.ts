@@ -3,10 +3,8 @@ import {
   browserSessionPersistence,
   createUserWithEmailAndPassword,
   getAuth,
-  onAuthStateChanged,
   setPersistence,
   signInWithEmailAndPassword,
-  User,
 } from "firebase/auth";
 import { Router } from "@angular/router";
 
@@ -38,5 +36,6 @@ export class AuthService {
 
   async logout() {
     await getAuth().signOut();
+    await getAuth().updateCurrentUser(null);
   }
 }
