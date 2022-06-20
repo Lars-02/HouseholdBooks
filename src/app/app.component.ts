@@ -1,8 +1,8 @@
-import { Component, OnInit } from "@angular/core";
+import { Component } from "@angular/core";
 import { DatabaseService } from "./service/database.service";
 import { AuthService } from "./service/auth.service";
 import { getAuth, onAuthStateChanged } from "firebase/auth";
-import { ActivatedRoute, Router } from "@angular/router";
+import { Router } from "@angular/router";
 import { Subscription } from "rxjs";
 
 @Component({
@@ -26,9 +26,11 @@ export class AppComponent {
       }
 
       if (!user) {
-        await this.router.navigateByUrl("/login");
+        if (router.url !== "/login" && router.url !== "/register") {
+          await this.router.navigateByUrl("/login");
+        }
         this.routeSubscription = this.router.events.subscribe(async () => {
-          if (!this.auth.user) {
+          if (!this.auth.user && router.url !== "/login" && router.url !== "/register") {
             await this.router.navigateByUrl("/login");
           }
         });
