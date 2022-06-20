@@ -10,6 +10,7 @@ import { ProjectComponent } from "./project/project.component";
 import { AuthService } from "./service/auth.service";
 import { DatabaseService } from "./service/database.service";
 import { ProjectDetailComponent } from './project/detail/project-detail.component';
+import { ErrorsComponent } from './components/errors/errors.component';
 
 @NgModule({
   declarations: [
@@ -19,6 +20,7 @@ import { ProjectDetailComponent } from './project/detail/project-detail.componen
     RegisterComponent,
     ProjectComponent,
     ProjectDetailComponent,
+    ErrorsComponent,
   ],
   exports: [
     AuthFormComponent,

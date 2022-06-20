@@ -40,5 +40,42 @@
         (change)="projectService.saveProject(project)">
         </textarea>
     </div>
+
+    <div class="categories">
+
+    </div>
+
+    <div class="balances">
+      <form *ngIf="form" [formGroup]="form"
+            (ngSubmit)="form.valid && createBalance()">
+        <div class="balance-form">
+          <div class="input">
+            <label for="balance-label">Label</label>
+            <input id="balance-label"
+                   type="text"
+                   formControlName="label"
+                   required>
+          </div>
+          <app-errors [control]="label"></app-errors>
+
+          <div class="input">
+            <label for="balance-amount">Amount</label>
+            <input id="balance-amount"
+                   type="number"
+                   formControlName="amount"
+                   required>
+          </div>
+          <app-errors [control]="amount"></app-errors>
+
+          <div>
+            <button type="submit">Create balance</button>
+          </div>
+        </div>
+      </form>
+      <ng-container *ngIf="balanceService.balances">
+        <div *ngFor="let balance of balanceService.balances" class="balance">
+        </div>
+      </ng-container>
+    </div>
   </div>
 </div>

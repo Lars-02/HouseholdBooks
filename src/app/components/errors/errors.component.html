@@ -1,0 +1,20 @@
+<div class="errors" *ngIf="control && (notDirty || control.dirty)">
+  <div *ngIf="control.errors?.['required']">
+    This field is required.
+  </div>
+  <div *ngIf="control.errors?.['minLength']">
+    This field must at least contain {{ control.errors?.['minLength']['requiredLength'] }} characters
+  </div>
+  <div *ngIf="control.errors?.['maxLength']">
+    This field can't have more then {{ control.errors?.['maxLength']['requiredLength'] }} characters
+  </div>
+  <div *ngIf="control.errors?.['min']">
+    This field must be bigger than {{ control.errors?.['min']['min'] }}
+  </div>
+  <div *ngIf="control.errors?.['max']">
+    This field must be smaller than {{ control.errors?.['max']['max'] }}
+  </div>
+  <div *ngIf="control.errors?.['notZero']">
+    This field can't be zero
+  </div>
+</div>

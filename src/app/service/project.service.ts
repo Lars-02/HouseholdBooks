@@ -74,5 +74,4 @@ export class ProjectService {
       return project.$id === id;
     });
   }
-
 }

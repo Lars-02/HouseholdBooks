@@ -1,7 +1,7 @@
-.form .input {
+.form, .input {
   display: flex;
   flex-direction: column;
-  flex: 4px;
+  gap: 4px;
 }
 
 .ng-valid[required], .ng-valid.required  {
