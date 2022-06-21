@@ -11,6 +11,8 @@ import {
   ValidatorFn,
   Validators,
 } from "@angular/forms";
+import * as dayjs from "dayjs";
+import { Dayjs } from "dayjs";
 
 export function notZero(): ValidatorFn {
   return (control: AbstractControl): ValidationErrors | null => {
@@ -29,10 +31,13 @@ export class ProjectDetailComponent implements OnInit, OnDestroy {
 
   get amount() { return this.form?.get("amount"); }
 
+  get formattedDate() { return dayjs(this.date).format('MMMM YYYY') };
+
   editName: boolean = false;
   project?: Project;
   form!: FormGroup;
 
+  private date: Dayjs = dayjs();
   private subscriptions: Subscription[] = [];
 
   constructor(public projectService: ProjectService, public balanceService: BalanceService, private route: ActivatedRoute, private router: Router) { }
@@ -74,10 +79,11 @@ export class ProjectDetailComponent implements OnInit, OnDestroy {
   }
 
   saveProjectName() {
-    if (!this.project || this.project.data.name.length < 1 || this.project.data.name.length > 16)
-      return
+    if (!this.project || this.project.data.name.length < 1 || this.project.data.name.length > 16) {
+      return;
+    }
     this.projectService.saveProject(this.project);
-    this.editName = false
+    this.editName = false;
   }
 
   async delete() {
@@ -104,6 +110,7 @@ export class ProjectDetailComponent implements OnInit, OnDestroy {
         label: this.label.value,
         amount: this.amount.value,
         category: null,
+        date: Date.now(),
       },
     });
     this.form.reset();
@@ -111,6 +118,10 @@ export class ProjectDetailComponent implements OnInit, OnDestroy {
 
   async balanceChange(balance: Balance) {
     await this.balanceService.saveBalance(balance);
+  }
+
+  changeMonth(by: number) {
+    this.date = dayjs(this.date).add(by, 'months')
   }
 
   ngOnDestroy(): void {

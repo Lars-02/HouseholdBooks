@@ -16,7 +16,9 @@
                [(ngModel)]="project.data.name"
                [ngClass]="{ 'ng-invalid': project.data.name.length < 1 || project.data.name.length > 16 }"
                (change)="saveProjectName()">
-        <div *ngIf="project.data.name.length > 0 && project.data.name.length <= 16" class="pointer" (click)="editName = false">
+        <div *ngIf="project.data.name.length > 0 && project.data.name.length <= 16"
+             class="pointer"
+             (click)="editName = false">
           <i class="fa-solid fa-xmark fa-lg"></i>
         </div>
       </ng-template>
@@ -76,6 +78,17 @@
           </div>
         </div>
       </form>
+      <div class="selector">
+        <div class="pointer" (click)="changeMonth(-1)">
+          <i class="fa-solid fa-chevron-left"></i>
+        </div>
+        <div class="month">
+          {{ formattedDate }}
+        </div>
+        <div class="pointer" (click)="changeMonth(1)">
+          <i class="fa-solid fa-chevron-right"></i>
+        </div>
+      </div>
       <ng-container *ngIf="balanceService.balances">
         <div *ngFor="let balance of balanceService.balances" class="balance">
           <div class="label">
@@ -83,9 +96,10 @@
               <i class="fa-solid fa-trash"></i>
             </div>
             <div>{{ balance.data.label }}</div>
+            <div>{{ balance.data.date | date }}</div>
           </div>
           <div class="amount"
-               [ngClass]="{ negative: (balance.data.amount ?? 0) < 0 }">{{ balance.data.amount }}</div>
+               [ngClass]="{ negative: (balance.data.amount ?? 0) < 0 }">{{ balance.data.amount | currency: 'EUR':'symbol' }}</div>
         </div>
       </ng-container>
     </div>

@@ -54,12 +54,16 @@ button:hover:not(:disabled) {
   background-color: #9CA3AF;
 }
 
-.ng-valid[required], .ng-valid.required {
+.ng-valid[required], .ng-valid.required, .ng-valid[required]:focus {
   border-left: 5px solid #42A948; /* green */
 }
 
 .ng-invalid:not(form), .ng-invalid:not(form):focus {
   border-left: 5px solid #a94442; /* red */
+}
+
+.pointer {
+  cursor: pointer;
 }
 
 html {

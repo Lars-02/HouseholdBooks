@@ -4,6 +4,7 @@ import { Subject } from "rxjs";
 import { Project } from "./project.service";
 import { getAuth, onAuthStateChanged } from "firebase/auth";
 import { onValue, push, ref, remove, set } from "firebase/database";
+import { Dayjs } from "dayjs";
 
 export interface Balance {
   $id?: string;
@@ -11,6 +12,7 @@ export interface Balance {
     label: string;
     amount?: number;
     category: string | null;
+    date: number;
   };
 }
 

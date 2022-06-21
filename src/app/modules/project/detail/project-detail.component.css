@@ -10,10 +10,6 @@
   gap: 4px;
 }
 
-.pointer {
-  cursor: pointer;
-}
-
 .input {
   display: flex;
   flex-direction: column;
@@ -47,6 +43,12 @@
   flex-grow: 1;
 }
 
+.month {
+  width: 200px;
+  display: flex;
+  justify-content: center;
+}
+
 .form-row {
   display: flex;
   flex-direction: row;
@@ -70,6 +72,13 @@
 .label {
   display: flex;
   gap: 6px;
+  align-items: center;
+}
+
+.selector {
+  justify-content: center;
+  display: flex;
+  gap: 8px;
   align-items: center;
 }
 
