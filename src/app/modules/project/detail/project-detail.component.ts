@@ -26,6 +26,7 @@ export function notZero(): ValidatorFn {
 export class ProjectDetailComponent implements OnInit, OnDestroy {
 
   get label() { return this.form?.get("label"); }
+
   get amount() { return this.form?.get("amount"); }
 
   editName: boolean = false;
@@ -41,6 +42,9 @@ export class ProjectDetailComponent implements OnInit, OnDestroy {
     this.project = this.projectService.getProject(id);
     if (this.project && this.project.data.archived) {
       await this.router.navigateByUrl("/");
+    }
+    if (this.project) {
+      this.balanceService.setProject(this.project);
     }
 
     this.form = new FormGroup({
@@ -67,6 +71,13 @@ export class ProjectDetailComponent implements OnInit, OnDestroy {
       }
       this.balanceService.setProject(this.project);
     }));
+  }
+
+  saveProjectName() {
+    if (!this.project || this.project.data.name.length < 1 || this.project.data.name.length > 16)
+      return
+    this.projectService.saveProject(this.project);
+    this.editName = false
   }
 
   async delete() {

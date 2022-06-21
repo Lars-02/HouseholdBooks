@@ -3,7 +3,6 @@ import { ModuleWithProviders } from "@angular/core";
 import { LoginComponent } from "./modules/login/login.component";
 import { ProjectComponent } from "./modules/project/project.component";
 import { ProjectDetailComponent } from "./modules/project/detail/project-detail.component";
-import { AuthGuard } from "./guards/auth.guard";
 import { RegisterComponent } from "./modules/register/register.component";
 
 export const routes: Routes = [
@@ -13,25 +12,19 @@ export const routes: Routes = [
   },
   {
     path: "",
-    canActivate: [AuthGuard],
-    children: [
-      {
-        path: "",
-        component: ProjectComponent,
-      },
-      {
-        path: "project/:projectId",
-        component: ProjectDetailComponent,
-      },
-      {
-        path: "register",
-        component: RegisterComponent,
-      },
-      {
-        path: "login",
-        component: LoginComponent,
-      },
-    ],
+    component: ProjectComponent,
+  },
+  {
+    path: "project/:projectId",
+    component: ProjectDetailComponent,
+  },
+  {
+    path: "register",
+    component: RegisterComponent,
+  },
+  {
+    path: "login",
+    component: LoginComponent,
   },
 ];
 

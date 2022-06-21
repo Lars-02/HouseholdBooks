@@ -14,11 +14,10 @@ export class ProjectComponent {
 
   constructor(public projectService: ProjectService) { }
 
-  async projectChange(project: Project) {
-    await this.projectService.saveProject(project);
-  }
-
   async createProject() {
+    if (this.newProject.data.name.length < 1 || this.newProject.data.name.length > 16) {
+      return;
+    }
     await this.projectService.saveProject(this.newProject);
     this.showNewProject = false;
     this.newProject = { data: { name: "", archived: false } };

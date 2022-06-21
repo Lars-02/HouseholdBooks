@@ -42,7 +42,7 @@ export class ProjectService {
 
   async saveProject(project: Project) {
     const user = getAuth().currentUser;
-    if (!user) {
+    if (!user || project.data.name.length < 1 || project.data.name.length > 16) {
       return;
     }
     if (project.$id) {

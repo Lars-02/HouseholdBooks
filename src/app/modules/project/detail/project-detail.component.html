@@ -14,8 +14,9 @@
       <ng-template #editNameInput>
         <input type="text"
                [(ngModel)]="project.data.name"
-               (change)="projectService.saveProject(project); editName = false">
-        <div class="pointer" (click)="editName = false">
+               [ngClass]="{ 'ng-invalid': project.data.name.length < 1 || project.data.name.length > 16 }"
+               (change)="saveProjectName()">
+        <div *ngIf="project.data.name.length > 0 && project.data.name.length <= 16" class="pointer" (click)="editName = false">
           <i class="fa-solid fa-xmark fa-lg"></i>
         </div>
       </ng-template>

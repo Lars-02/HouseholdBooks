@@ -10,10 +10,11 @@
       <div *ngIf="(!showArchived && !project.data.archived) || (showArchived && project.data.archived)"
            class="project">
         <input [id]="project.$id"
+               [ngClass]="{ 'ng-invalid': project.data.name.length < 1 || project.data.name.length > 16 }"
                type="text"
                [(ngModel)]="project.data.name"
                autocomplete="off"
-               (change)="projectChange(project)">
+               (change)="projectService.saveProject(project)">
         <div *ngIf="project.$id && !project.data.archived"
              [routerLink]="'project/' + project.$id"
              class="link">Go to project
@@ -26,6 +27,7 @@
     </ng-container>
     <div *ngIf="showNewProject && !showArchived" class="project">
       <input id="new-project"
+             [ngClass]="{ 'ng-invalid': newProject.data.name.length < 1 || newProject.data.name.length > 16 }"
              type="text"
              [(ngModel)]="newProject.data.name"
              autocomplete="off"
