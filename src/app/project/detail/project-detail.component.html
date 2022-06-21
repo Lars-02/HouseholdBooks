@@ -77,7 +77,12 @@
       </form>
       <ng-container *ngIf="balanceService.balances">
         <div *ngFor="let balance of balanceService.balances" class="balance">
-          <span>{{ balance.data.label }}</span>
+          <div class="label">
+            <div class="pointer" (click)="balanceService.deleteBalance(balance)">
+              <i class="fa-solid fa-trash fa-lg"></i>
+            </div>
+            <div>{{ balance.data.label }}</div>
+          </div>
           <div class="amount"
                [ngClass]="{ negative: (balance.data.amount ?? 0) < 0 }">{{ balance.data.amount }}</div>
         </div>

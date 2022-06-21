@@ -75,6 +75,12 @@
   gap: 8px;
 }
 
+.label {
+  display: flex;
+  gap: 6px;
+  align-items: center;
+}
+
 .amount {
   padding: 6px;
   border-radius: 4px;

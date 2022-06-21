@@ -9,11 +9,19 @@ import { Project, ProjectService } from "../service/project.service";
 export class ProjectComponent {
 
   public showArchived: boolean = false;
+  public showNewProject: boolean = false;
+  public newProject: Project = { data: { name: "", archived: false } };
 
   constructor(public projectService: ProjectService) { }
 
   async projectChange(project: Project) {
     await this.projectService.saveProject(project);
+  }
+
+  async createProject() {
+    await this.projectService.saveProject(this.newProject);
+    this.showNewProject = false;
+    this.newProject = { data: { name: "", archived: false } };
   }
 
   canAdd() {
@@ -30,7 +38,7 @@ export class ProjectComponent {
 
   async unarchive(project: Project) {
     project.data.archived = false;
-    await this.projectService.saveProject(project)
+    await this.projectService.saveProject(project);
     if (!this.archiveExists()) {
       this.showArchived = false;
     }

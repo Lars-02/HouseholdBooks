@@ -40,13 +40,6 @@ export class ProjectService {
     });
   }
 
-  addProject() {
-    const user = getAuth().currentUser;
-    if (user) {
-      this.projects.push({ data: { name: "", archived: false } });
-    }
-  }
-
   async saveProject(project: Project) {
     const user = getAuth().currentUser;
     if (!user) {
@@ -61,7 +54,7 @@ export class ProjectService {
 
   async deleteProject(project: Project) {
     const user = getAuth().currentUser;
-    if (!user) {
+    if (!user || !project.$id) {
       return;
     }
     await remove(ref(this.database.db, "projects/" + user.uid + "/" + project.$id));

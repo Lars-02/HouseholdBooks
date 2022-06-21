@@ -3,7 +3,7 @@ import { DatabaseService } from "./database.service";
 import { Subject } from "rxjs";
 import { Project } from "./project.service";
 import { getAuth, onAuthStateChanged } from "firebase/auth";
-import { onValue, push, ref, set } from "firebase/database";
+import { onValue, push, ref, remove, set } from "firebase/database";
 
 export interface Balance {
   $id?: string;
@@ -26,6 +26,9 @@ export class BalanceService {
   constructor(private database: DatabaseService) { }
 
   setProject(project: Project) {
+    if (this.project === project) {
+      return;
+    }
     this.project = project;
     this.getBalance();
   }
@@ -35,10 +38,8 @@ export class BalanceService {
       if (!user || !this.project) {
         return;
       }
-        console.log("projects/" + user.uid + "/" + this.project.$id + "/balances")
       onValue(ref(this.database.db, "projects/" + user.uid + "/" + this.project.$id + "/balances"), (snapshot => {
         this.balances = [];
-        console.log(snapshot.val())
         snapshot.forEach(child => {
           this.balances.push({
             $id: child.key ?? undefined,
@@ -62,5 +63,13 @@ export class BalanceService {
     } else {
       push(ref(this.database.db, "projects/" + user.uid + "/" + this.project.$id + "/balances"), balance.data);
     }
+  }
+
+  async deleteBalance(balance: Balance) {
+    const user = getAuth().currentUser;
+    if (!user || !this.project || !this.project.$id || !balance.$id) {
+      return;
+    }
+    await remove(ref(this.database.db, "projects/" + user.uid + "/" + this.project.$id + "/balances/" + balance.$id));
   }
 }

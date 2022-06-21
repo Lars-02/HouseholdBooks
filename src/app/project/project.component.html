@@ -24,7 +24,14 @@
         </div>
       </div>
     </ng-container>
-    <button *ngIf="!showArchived" [disabled]="canAdd()" (click)="projectService.addProject()">
+    <div *ngIf="showNewProject && !showArchived" class="project">
+      <input id="new-project"
+             type="text"
+             [(ngModel)]="newProject.data.name"
+             autocomplete="off"
+             (change)="createProject()">
+    </div>
+    <button *ngIf="!showArchived" [disabled]="showNewProject" (click)="showNewProject = true">
       Add project
     </button>
   </div>

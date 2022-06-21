@@ -26,7 +26,6 @@ export function notZero(): ValidatorFn {
 export class ProjectDetailComponent implements OnInit, OnDestroy {
 
   get label() { return this.form?.get("label"); }
-
   get amount() { return this.form?.get("amount"); }
 
   editName: boolean = false;
@@ -40,6 +39,9 @@ export class ProjectDetailComponent implements OnInit, OnDestroy {
   async ngOnInit() {
     const id = this.route.snapshot.paramMap.get("projectId");
     this.project = this.projectService.getProject(id);
+    if (this.project && this.project.data.archived) {
+      await this.router.navigateByUrl("/");
+    }
 
     this.form = new FormGroup({
       label: new FormControl(this.label, [
@@ -57,22 +59,14 @@ export class ProjectDetailComponent implements OnInit, OnDestroy {
       ]),
     });
 
-    if (!this.project) {
-      this.subscriptions.push(this.projectService.projectsChanged.subscribe(async () => {
-        this.project = this.projectService.getProject(id);
-        if (!this.project || this.project.data.archived) {
-          await this.router.navigateByUrl("/");
-          return;
-        }
-        this.balanceService.setProject(this.project);
-      }));
-      return;
-    }
-
-    this.balanceService.setProject(this.project);
-    if (this.project.data.archived) {
-      await this.router.navigateByUrl("/");
-    }
+    this.subscriptions.push(this.projectService.projectsChanged.subscribe(async () => {
+      this.project = this.projectService.getProject(id);
+      if (!this.project || this.project.data.archived) {
+        await this.router.navigateByUrl("/");
+        return;
+      }
+      this.balanceService.setProject(this.project);
+    }));
   }
 
   async delete() {
@@ -101,7 +95,7 @@ export class ProjectDetailComponent implements OnInit, OnDestroy {
         category: null,
       },
     });
-    this.form.reset()
+    this.form.reset();
   }
 
   async balanceChange(balance: Balance) {
@@ -112,9 +106,5 @@ export class ProjectDetailComponent implements OnInit, OnDestroy {
     for (const subscription of this.subscriptions) {
       subscription.unsubscribe();
     }
-  }
-
-  submit() {
-    return false;
   }
 }
