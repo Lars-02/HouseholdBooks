@@ -19,7 +19,7 @@
              class="link">Go to project
         </div>
         <div *ngIf="project.data.archived"
-             (click)="project.data.archived = false; projectService.saveProject(project)"
+             (click)="unarchive(project)"
              class="link">Unarchive
         </div>
       </div>

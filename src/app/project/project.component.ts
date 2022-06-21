@@ -27,4 +27,12 @@ export class ProjectComponent {
       return project.data.archived;
     });
   }
+
+  async unarchive(project: Project) {
+    project.data.archived = false;
+    await this.projectService.saveProject(project)
+    if (!this.archiveExists()) {
+      this.showArchived = false;
+    }
+  }
 }
