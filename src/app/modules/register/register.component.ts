@@ -1,7 +1,7 @@
 import { Component, OnInit } from "@angular/core";
-import { AuthService } from "../service/auth.service";
 import { Router } from "@angular/router";
 import { getAuth, onAuthStateChanged } from "firebase/auth";
+import { AuthService } from "../../service/auth.service";
 
 @Component({
   selector: "app-register",

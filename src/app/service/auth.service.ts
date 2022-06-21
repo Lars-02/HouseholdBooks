@@ -7,6 +7,8 @@ import {
   signInWithEmailAndPassword,
 } from "firebase/auth";
 import { Router } from "@angular/router";
+import { ProjectService } from "./project.service";
+import { BalanceService } from "./balance.service";
 
 export interface FormUser {
   email: string;
@@ -20,7 +22,7 @@ export class AuthService {
 
   get user() { return getAuth().currentUser;}
 
-  constructor(private router: Router) { }
+  constructor(private router: Router, private project: ProjectService, private balance: BalanceService) { }
 
   async signIn(user: FormUser) {
     await setPersistence(getAuth(), browserSessionPersistence);
@@ -37,5 +39,7 @@ export class AuthService {
   async logout() {
     await getAuth().signOut();
     await getAuth().updateCurrentUser(null);
+    this.project.projects = [];
+    this.balance.balances = [];
   }
 }

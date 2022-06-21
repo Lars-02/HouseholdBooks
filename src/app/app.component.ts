@@ -30,7 +30,7 @@ export class AppComponent {
           await this.router.navigateByUrl("/login");
         }
         this.routeSubscription = this.router.events.subscribe(async () => {
-          if (!this.auth.user && router.url !== "/login" && router.url !== "/register") {
+          if (router.url !== "/login" && router.url !== "/register") {
             await this.router.navigateByUrl("/login");
           }
         });

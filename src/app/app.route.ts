@@ -1,9 +1,10 @@
 import { RouterModule, Routes } from "@angular/router";
 import { ModuleWithProviders } from "@angular/core";
-import { RegisterComponent } from "./register/register.component";
-import { LoginComponent } from "./login/login.component";
-import { ProjectComponent } from "./project/project.component";
-import { ProjectDetailComponent } from "./project/detail/project-detail.component";
+import { LoginComponent } from "./modules/login/login.component";
+import { ProjectComponent } from "./modules/project/project.component";
+import { ProjectDetailComponent } from "./modules/project/detail/project-detail.component";
+import { AuthGuard } from "./guards/auth.guard";
+import { RegisterComponent } from "./modules/register/register.component";
 
 export const routes: Routes = [
   {
@@ -12,19 +13,25 @@ export const routes: Routes = [
   },
   {
     path: "",
-    component: ProjectComponent,
-  },
-  {
-    path: "project/:projectId",
-    component: ProjectDetailComponent,
-  },
-  {
-    path: "register",
-    component: RegisterComponent,
-  },
-  {
-    path: "login",
-    component: LoginComponent,
+    canActivate: [AuthGuard],
+    children: [
+      {
+        path: "",
+        component: ProjectComponent,
+      },
+      {
+        path: "project/:projectId",
+        component: ProjectDetailComponent,
+      },
+      {
+        path: "register",
+        component: RegisterComponent,
+      },
+      {
+        path: "login",
+        component: LoginComponent,
+      },
+    ],
   },
 ];
 

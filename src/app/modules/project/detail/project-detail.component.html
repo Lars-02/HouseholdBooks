@@ -79,7 +79,7 @@
         <div *ngFor="let balance of balanceService.balances" class="balance">
           <div class="label">
             <div class="pointer" (click)="balanceService.deleteBalance(balance)">
-              <i class="fa-solid fa-trash fa-lg"></i>
+              <i class="fa-solid fa-trash"></i>
             </div>
             <div>{{ balance.data.label }}</div>
           </div>

@@ -1,16 +1,16 @@
 import { NgModule } from "@angular/core";
 import { BrowserModule } from "@angular/platform-browser";
 import { AppComponent } from "./app.component";
-import { LoginComponent } from "./login/login.component";
+import { LoginComponent } from "./modules/login/login.component";
 import { routing } from "./app.route";
 import { FormsModule, ReactiveFormsModule } from "@angular/forms";
-import { RegisterComponent } from "./register/register.component";
-import { AuthFormComponent } from "./auth-form/auth-form.component";
-import { ProjectComponent } from "./project/project.component";
+import { AuthFormComponent } from "./modules/auth-form/auth-form.component";
+import { ProjectComponent } from "./modules/project/project.component";
 import { AuthService } from "./service/auth.service";
 import { DatabaseService } from "./service/database.service";
-import { ProjectDetailComponent } from './project/detail/project-detail.component';
-import { ErrorsComponent } from './components/errors/errors.component';
+import { ProjectDetailComponent } from './modules/project/detail/project-detail.component';
+import { ErrorsComponent } from './modules/components/errors/errors.component';
+import { RegisterComponent } from "./modules/register/register.component";
 
 @NgModule({
   declarations: [

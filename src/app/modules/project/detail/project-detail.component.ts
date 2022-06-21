@@ -1,8 +1,8 @@
 import { Component, OnDestroy, OnInit } from "@angular/core";
 import { ActivatedRoute, Router } from "@angular/router";
-import { Project, ProjectService } from "../../service/project.service";
+import { Project, ProjectService } from "../../../service/project.service";
 import { Subscription } from "rxjs";
-import { Balance, BalanceService } from "../../service/balance.service";
+import { Balance, BalanceService } from "../../../service/balance.service";
 import {
   AbstractControl,
   FormControl,
