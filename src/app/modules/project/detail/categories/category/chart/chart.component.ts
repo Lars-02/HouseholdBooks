@@ -14,12 +14,13 @@ export class ChartComponent implements OnInit, OnDestroy, AfterViewInit {
   private subscriptions: Subscription[] = [];
   private profit: number = 0;
   private cost: number = 0;
+  private chart?: Chart;
 
   constructor(private balanceService: BalanceService) { Chart.register(...registerables); }
 
   ngOnInit() {
     this.subscriptions.push(this.balanceService.balancesChanged.subscribe(() => {
-
+      this.setCostAndProfit();
     }));
   }
 
@@ -47,6 +48,9 @@ export class ChartComponent implements OnInit, OnDestroy, AfterViewInit {
   }
 
   private setChart() {
+    if (this.chart) {
+      this.chart.destroy();
+    }
     const ctx = (document.getElementById("chart" + this.category.$id) as HTMLCanvasElement)?.getContext("2d");
     if (!ctx) { return; }
     const data: ChartData = {
@@ -89,7 +93,7 @@ export class ChartComponent implements OnInit, OnDestroy, AfterViewInit {
         },
       },
     };
-    new Chart(ctx, config);
+    this.chart = new Chart(ctx, config);
   }
 
 }
