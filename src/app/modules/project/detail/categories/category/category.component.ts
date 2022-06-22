@@ -2,6 +2,7 @@ import { Component, EventEmitter, Input, OnInit, Output } from "@angular/core";
 import { Category, CategoryService } from "../../../../../service/category.service";
 import { FormControl, FormGroup, Validators } from "@angular/forms";
 import * as dayjs from "dayjs";
+import { BalanceService } from "../../../../../service/balance.service";
 
 export interface CategoryView extends Category {
   edit: boolean;
@@ -25,7 +26,7 @@ export class CategoryComponent implements OnInit {
 
   get endDate() { return this.form?.get("endDate"); }
 
-  constructor(public categoryService: CategoryService) { }
+  constructor(public categoryService: CategoryService, private balanceService: BalanceService) { }
 
   ngOnInit(): void {
     const endDate = dayjs(this.category.data.endDate).isValid() ? dayjs(this.category.data.endDate).format("YYYY-MM-DD") : null;
@@ -62,5 +63,21 @@ export class CategoryComponent implements OnInit {
   saveNewCategory() {
     this.categoryService.saveCategory(this.category);
     this.savedNewCategory.next();
+  }
+
+  balanceDropped($event: DragEvent) {
+    if (!this.category) { return; }
+    const balanceId = $event.dataTransfer?.getData("text");
+    if (!balanceId) { return; }
+    const balance = this.balanceService.getBalance(balanceId);
+    if (!balance) { return; }
+    balance.data.category = this.category.$id ?? null;
+    this.balanceService.saveBalance(balance);
+  }
+
+  dropAllowed($event: DragEvent) {
+    if (this.category && this.category.$id) {
+      $event.preventDefault();
+    }
   }
 }

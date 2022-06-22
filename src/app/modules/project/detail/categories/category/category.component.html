@@ -1,4 +1,4 @@
-<div class="category" *ngIf="category">
+<div class="category" *ngIf="category" (drop)="balanceDropped($event)" (dragover)="dropAllowed($event)">
   <ng-container *ngIf="!category.edit; else edit">
     <div class="header">
       <div class="row">

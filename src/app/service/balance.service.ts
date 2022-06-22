@@ -44,10 +44,10 @@ export class BalanceService {
       return;
     }
     this.project = project;
-    this.getBalance();
+    this.getBalances();
   }
 
-  private getBalance() {
+  private getBalances() {
     onAuthStateChanged(getAuth(), async (user) => {
       if (!user || !this.project) {
         return;
@@ -82,7 +82,7 @@ export class BalanceService {
     this.balancesChanged.next();
   }
 
-  async saveBalance(balance: Balance, property?: "label" | "amount" | "date") {
+  async saveBalance(balance: Balance, property?: "label" | "amount" | "date" | "category") {
     const user = getAuth().currentUser;
     if (!user || !this.project || !this.project.$id) {
       return;
@@ -122,5 +122,11 @@ export class BalanceService {
     this.allBalances = [];
     this.balances = [];
     this.date = dayjs();
+  }
+
+  getBalance(id: string): BalanceView | undefined {
+    return this.balances.find(balance => {
+      return balance.$id === id;
+    });
   }
 }

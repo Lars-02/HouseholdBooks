@@ -79,7 +79,7 @@ export class CategoryService {
 
   getCategory(id: string): Category | undefined {
     return this.categories.find(category => {
-      return category.$id = id;
+      return category.$id === id;
     });
   }
 }

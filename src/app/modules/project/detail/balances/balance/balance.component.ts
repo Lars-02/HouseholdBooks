@@ -54,7 +54,7 @@ export class BalanceComponent implements OnInit, OnDestroy {
       if (this.balance.data.category) {
         this.categoryName = this.categoryService.getCategory(this.balance.data.category)?.data.label;
       }
-    }))
+    }));
   }
 
   saveBalance(property: "label" | "amount" | "date") {
@@ -75,5 +75,10 @@ export class BalanceComponent implements OnInit, OnDestroy {
     for (const subscription of this.subscriptions) {
       subscription.unsubscribe();
     }
+  }
+
+  drag($event: DragEvent) {
+    if (!this.balance || !this.balance.$id) { return; }
+    $event.dataTransfer?.setData("text", this.balance.$id);
   }
 }

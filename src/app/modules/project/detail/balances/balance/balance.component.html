@@ -1,7 +1,9 @@
 <div *ngIf="balance" class="balance">
   <ng-container *ngIf="!balance.edit; else edit">
     <div class="box">
-      <div class="label min-width">{{ balance.data.label }}</div>
+      <div class="box draggable" draggable="true" (dragstart)="drag($event)">
+        <div class="label min-width">{{ balance.data.label }}</div>
+      </div>
       <div>{{ balance.data.date | date }}</div>
       <input *ngIf="balance.edit"
              type="date"
