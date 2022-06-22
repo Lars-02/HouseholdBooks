@@ -72,6 +72,11 @@
 }
 
 .label {
+  min-width: 200px;
+  font-weight: 600;
+}
+
+.box {
   display: flex;
   gap: 6px;
   align-items: center;

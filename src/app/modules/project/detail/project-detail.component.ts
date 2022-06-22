@@ -90,12 +90,17 @@ export class ProjectDetailComponent implements OnInit, OnDestroy {
   }
 
   private async setBalances() {
-    this.balances = this.balanceService.balances.filter(balance => {
-      const date = dayjs(balance.data.date);
-      return date.month() === this.date.month() && date.year() === this.date.year();
-    }).map(balance => {
-      return { ...balance, editDate: false };
-    });
+    this.balances = this.balanceService.balances
+      .filter(balance => {
+        const date = dayjs(balance.data.date);
+        return date.month() === this.date.month() && date.year() === this.date.year();
+      })
+      .map(balance => {
+        return { ...balance, editDate: false };
+      })
+      .sort((first, last) => {
+        return last.data.date - first.data.date;
+      });
   }
 
   saveProjectName() {

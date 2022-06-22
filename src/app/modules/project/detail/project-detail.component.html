@@ -91,11 +91,8 @@
       </div>
       <ng-container *ngIf="balances">
         <div *ngFor="let balance of balances" class="balance">
-          <div class="label">
-            <div class="pointer" (click)="deleteBalance(balance)">
-              <i class="fa-solid fa-trash"></i>
-            </div>
-            <div>{{ balance.data.label }}</div>
+          <div class="box">
+            <div class="label">{{ balance.data.label }}</div>
             <div>{{ balance.data.date | date }}</div>
             <input *ngIf="balance.editDate"
                    type="date"
@@ -110,8 +107,13 @@
               </div>
             </div>
           </div>
-          <div class="amount"
-               [ngClass]="{ negative: (balance.data.amount ?? 0) < 0 }">{{ balance.data.amount | currency: 'EUR':'symbol' }}</div>
+          <div class="box"
+               [ngClass]="{ negative: (balance.data.amount ?? 0) < 0 }">
+            <div class="amount">{{ balance.data.amount | currency: 'EUR':'symbol' }}</div>
+            <div class="pointer" (click)="deleteBalance(balance)">
+              <i class="fa-solid fa-trash"></i>
+            </div>
+          </div>
         </div>
       </ng-container>
     </div>
