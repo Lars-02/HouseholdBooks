@@ -38,7 +38,7 @@ export class CategoryService {
       if (!user || !this.project) {
         return;
       }
-      onValue(ref(this.database.db, "projects/" + user.uid + "/" + this.project.$id + "/categories"), (snapshot => {
+      onValue(ref(this.database.db, `projects/${user.uid}/${this.project.$id}/categories`), (snapshot => {
         this.categories = [];
         snapshot.forEach(child => {
           this.categories.push({
@@ -53,15 +53,19 @@ export class CategoryService {
     });
   }
 
-  async saveCategory(category: Category) {
+  async saveCategory(category: Category, property?: "label" | "budget" | "endDate") {
     const user = getAuth().currentUser;
     if (!user || !this.project || !this.project.$id) {
       return;
     }
     if (category.$id) {
-      await set(ref(this.database.db, "projects/" + user.uid + "/" + this.project.$id + "/categories/" + category.$id), category.data);
+      if (property) {
+        await set(ref(this.database.db, `projects/${user.uid}/${this.project.$id}/categories/${category.$id}/${property}`), category.data[property]);
+      } else {
+        await set(ref(this.database.db, `projects/${user.uid}/${this.project.$id}/categories/${category.$id}`), category.data);
+      }
     } else {
-      push(ref(this.database.db, "projects/" + user.uid + "/" + this.project.$id + "/categories"), category.data);
+      push(ref(this.database.db, `projects/${user.uid}/${this.project.$id}/categories`), category.data);
     }
   }
 

@@ -1,19 +1,73 @@
-<div class="category">
-  <div class="header">
-    <div class="label">{{ category.data.label }}</div>
-    <div class="box">
-      <div class="box">
-        <div>Budget:</div>
-        <div>{{ category.data.budget | currency: 'EUR':'symbol' }}</div>
+<div class="category" *ngIf="category">
+  <ng-container *ngIf="!category.edit; else edit">
+    <div class="header">
+      <div class="row">
+        <div class="label">{{ category.data.label }}</div>
+        <div class="box">
+          <div class="box">
+            <div>Budget:</div>
+            <div>{{ category.data.budget | currency: 'EUR':'symbol' }}</div>
+          </div>
+          <div class="options">
+            <div class="pointer" (click)="category.edit = !category.edit">
+              <i class="fa-solid fa-pen"></i>
+            </div>
+            <div class="pointer" (click)="categoryService.deleteCategory(category)">
+              <i class="fa-solid fa-trash"></i>
+            </div>
+          </div>
+        </div>
       </div>
-      <div (click)="category.edit = !category.edit" class="edit-button">
-        <div *ngIf="category.edit">
-          <i class="fa-solid fa-xmark"></i>
-        </div>
-        <div *ngIf="!category.edit">
-          <i class="fa-solid fa-pen"></i>
-        </div>
+      <div class="until">
+        {{ category.data.endDate | date }}
       </div>
     </div>
-  </div>
+    <category-chart [category]="category"></category-chart>
+  </ng-container>
+  <ng-template #edit>
+    <div *ngIf="!category.$id" class="label">Create new category</div>
+    <div *ngIf="category.$id" class="header box">
+      <div class="label">Edit category</div>
+      <div (click)="category.edit = !category.edit" class="options pointer">
+        <i class="fa-solid fa-xmark"></i>
+      </div>
+    </div>
+    <form *ngIf="form" [formGroup]="form" (ngSubmit)="saveNewCategory()">
+      <div class="category-form">
+        <div class="input">
+          <label for="category-label">Label</label>
+          <input id="category-label"
+                 type="text"
+                 formControlName="label"
+                 autocomplete="off"
+                 (change)="saveCategory('label')"
+                 required>
+          <app-errors [control]="label"></app-errors>
+        </div>
+
+        <div class="input">
+          <label for="category-budget">Budget</label>
+          <input id="category-budget"
+                 type="number"
+                 formControlName="budget"
+                 (change)="saveCategory('budget')"
+                 required>
+          <app-errors [control]="budget"></app-errors>
+        </div>
+
+        <div class="input">
+          <label for="category-end-date">End date</label>
+          <input id="category-end-date"
+                 type="date"
+                 (change)="saveCategory('endDate')"
+                 formControlName="endDate">
+          <app-errors [control]="endDate"></app-errors>
+        </div>
+      </div>
+
+      <div *ngIf="!category.$id" class="submit">
+        <button *ngIf="form.valid" type="submit">Save new category</button>
+      </div>
+    </form>
+  </ng-template>
 </div>

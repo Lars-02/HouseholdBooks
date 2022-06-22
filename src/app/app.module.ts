@@ -13,6 +13,7 @@ import { ErrorsComponent } from './modules/components/errors/errors.component';
 import { RegisterComponent } from "./modules/register/register.component";
 import { CategoryComponent } from './modules/project/detail/category/category.component';
 import { CategoriesComponent } from './modules/project/detail/categories/categories.component';
+import { ChartComponent } from './modules/project/detail/category/chart/chart.component';
 
 @NgModule({
   declarations: [
@@ -25,6 +26,7 @@ import { CategoriesComponent } from './modules/project/detail/categories/categor
     ErrorsComponent,
     CategoryComponent,
     CategoriesComponent,
+    ChartComponent,
   ],
   exports: [
     AuthFormComponent,

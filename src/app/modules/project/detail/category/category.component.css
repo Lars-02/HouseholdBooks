@@ -1,17 +1,43 @@
 .category {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
   background-color: lightgrey;
   border-radius: 2px;
   padding: 8px;
+  min-height: 240px;
 }
 
-.category > .header {
+.header {
+  min-height: 40px;
+}
+
+.header.box {
+  justify-content: space-between;
+  align-items: start;
+}
+
+.header > .row {
   display: flex;
   gap: 4px;
   justify-content: space-between;
 }
 
-.edit-button {
+.options {
   display: flex;
+  align-items: center;
+  gap: 8px;
   justify-content: flex-end;
   min-width: 20px;
+  cursor: pointer;
+}
+
+.until {
+  display: flex;
+  justify-content: flex-end;
+}
+
+.submit {
+  margin-top: 6px;
+  min-height: 32px;
 }
