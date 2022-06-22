@@ -66,6 +66,30 @@ button:hover:not(:disabled) {
   cursor: pointer;
 }
 
+.box {
+  display: flex;
+  gap: 6px;
+  align-items: center;
+}
+
+.label {
+  font-weight: 600;
+}
+
+.input {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  flex-grow: 1;
+}
+
+.form-row {
+  display: flex;
+  flex-direction: row;
+  width: 100%;
+  gap: 8px;
+}
+
 html {
   scroll-behavior: smooth;
 }

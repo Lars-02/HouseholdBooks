@@ -11,6 +11,8 @@ import { DatabaseService } from "./service/database.service";
 import { ProjectDetailComponent } from './modules/project/detail/project-detail.component';
 import { ErrorsComponent } from './modules/components/errors/errors.component';
 import { RegisterComponent } from "./modules/register/register.component";
+import { CategoryComponent } from './modules/project/detail/category/category.component';
+import { CategoriesComponent } from './modules/project/detail/categories/categories.component';
 
 @NgModule({
   declarations: [
@@ -21,6 +23,8 @@ import { RegisterComponent } from "./modules/register/register.component";
     ProjectComponent,
     ProjectDetailComponent,
     ErrorsComponent,
+    CategoryComponent,
+    CategoriesComponent,
   ],
   exports: [
     AuthFormComponent,

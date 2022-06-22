@@ -44,49 +44,7 @@
         </textarea>
     </div>
 
-    <div class="categories">
-      <div *ngFor="let category of categoryService.categories" class="category">
-        <div>{{ category.data.label }}</div>
-      </div>
-      <form *ngIf="createCategoryForm" [formGroup]="createCategoryForm"
-            (ngSubmit)="createCategoryForm.valid && createCategory()">
-        <div class="category-form">
-          <div class="form-row">
-            <div class="input">
-              <label for="category-label">Label</label>
-              <input id="category-label"
-                     type="text"
-                     formControlName="label"
-                     autocomplete="off"
-                     required>
-              <app-errors [control]="categoryLabel"></app-errors>
-            </div>
-
-            <div class="input">
-              <label for="category-budget">Budget</label>
-              <input id="category-budget"
-                     type="number"
-                     formControlName="budget"
-                     required>
-              <app-errors [control]="categoryBudget"></app-errors>
-            </div>
-
-            <div class="input">
-              <label for="category-end-date">End date</label>
-              <input id="category-end-date"
-                     type="date"
-                     formControlName="endDate">
-              <app-errors [control]="categoryEndDate"></app-errors>
-            </div>
-          </div>
-
-
-          <div>
-            <button type="submit">Create category</button>
-          </div>
-        </div>
-      </form>
-    </div>
+    <app-categories></app-categories>
 
     <div class="balances">
       <form *ngIf="createBalanceForm" [formGroup]="createBalanceForm"
@@ -133,7 +91,7 @@
         <!--TODO EDIT NAME AND AMOUNT-->
         <div *ngFor="let balance of balances" class="balance">
           <div class="box">
-            <div class="label">{{ balance.data.label }}</div>
+            <div class="label min-width">{{ balance.data.label }}</div>
             <div>{{ balance.data.date | date }}</div>
             <input *ngIf="balance.editDate"
                    type="date"

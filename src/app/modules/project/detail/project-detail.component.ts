@@ -14,6 +14,7 @@ import {
 import * as dayjs from "dayjs";
 import { Dayjs } from "dayjs";
 import { CategoryService } from "../../../service/category.service";
+import { CategoryView } from "./category/category.component";
 
 export function notZero(): ValidatorFn {
   return (control: AbstractControl): ValidationErrors | null => {
@@ -37,25 +38,18 @@ export class ProjectDetailComponent implements OnInit, OnDestroy {
 
   get balanceAmount() { return this.createBalanceForm?.get("amount"); }
 
-  get categoryLabel() { return this.createCategoryForm?.get("label"); }
-
-  get categoryBudget() { return this.createCategoryForm?.get("budget"); }
-
-  get categoryEndDate() { return this.createCategoryForm?.get("endDate"); }
-
   get formattedDate() { return dayjs(this.date).format("MMMM YYYY"); };
 
   editName: boolean = false;
   balances: BalanceView[] = [];
   project?: Project;
   createBalanceForm!: FormGroup;
-  createCategoryForm!: FormGroup;
   dateForm!: FormGroup;
 
   private date: Dayjs = dayjs();
   private subscriptions: Subscription[] = [];
 
-  constructor(public projectService: ProjectService, public categoryService: CategoryService, private balanceService: BalanceService, private route: ActivatedRoute, private router: Router) { }
+  constructor(public projectService: ProjectService, private categoryService: CategoryService, private balanceService: BalanceService, private route: ActivatedRoute, private router: Router) { }
 
   async ngOnInit() {
     const id = this.route.snapshot.paramMap.get("projectId");
@@ -65,7 +59,7 @@ export class ProjectDetailComponent implements OnInit, OnDestroy {
     }
     if (this.project) {
       this.balanceService.setProject(this.project);
-      this.categoryService.setProject(this.project)
+      this.categoryService.setProject(this.project);
     }
 
     this.createBalanceForm = new FormGroup({
@@ -84,39 +78,22 @@ export class ProjectDetailComponent implements OnInit, OnDestroy {
       ]),
     });
 
-    this.createCategoryForm = new FormGroup({
-      label: new FormControl(this.categoryLabel, [
-        Validators.required,
-        Validators.minLength(1),
-        Validators.maxLength(16),
-      ]),
-      budget: new FormControl(this.categoryBudget, [
-        notZero(),
-        Validators.required,
-        Validators.min(-10000),
-        Validators.max(10000),
-        Validators.minLength(1),
-        Validators.maxLength(7),
-      ]),
-      endDate: new FormControl(this.categoryEndDate, []),
-    });
-
     this.subscriptions.push(this.projectService.projectsChanged.subscribe(async () => {
       this.project = this.projectService.getProject(id);
       if (!this.project || this.project.data.archived) {
         await this.router.navigateByUrl("/");
         return;
       }
-      this.categoryService.setProject(this.project)
+      this.categoryService.setProject(this.project);
       this.balanceService.setProject(this.project);
     }));
 
     this.subscriptions.push(this.balanceService.balancesChanged.subscribe(async () => {
-      await this.setBalances();
+      this.setBalances();
     }));
   }
 
-  private async setBalances() {
+  private setBalances() {
     this.balances = this.balanceService.balances
       .filter(balance => {
         const date = dayjs(balance.data.date);
@@ -164,19 +141,6 @@ export class ProjectDetailComponent implements OnInit, OnDestroy {
       },
     });
     this.createBalanceForm.reset();
-  }
-
-  async createCategory() {
-    if (!this.categoryLabel || !this.categoryBudget || !this.categoryEndDate) { return;}
-    const date = dayjs(this.categoryEndDate.value);
-    await this.categoryService.saveCategory({
-      data: {
-        label: this.categoryLabel.value,
-        budget: this.categoryBudget.value,
-        endDate: date.isValid() ? date.valueOf() : null,
-      },
-    });
-    this.createCategoryForm.reset();
   }
 
   async balanceChange(balance: Balance) {

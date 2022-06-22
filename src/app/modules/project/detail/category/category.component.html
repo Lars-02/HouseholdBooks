@@ -1,0 +1,19 @@
+<div class="category">
+  <div class="header">
+    <div class="label">{{ category.data.label }}</div>
+    <div class="box">
+      <div class="box">
+        <div>Budget:</div>
+        <div>{{ category.data.budget | currency: 'EUR':'symbol' }}</div>
+      </div>
+      <div (click)="category.edit = !category.edit" class="edit-button">
+        <div *ngIf="category.edit">
+          <i class="fa-solid fa-xmark"></i>
+        </div>
+        <div *ngIf="!category.edit">
+          <i class="fa-solid fa-pen"></i>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

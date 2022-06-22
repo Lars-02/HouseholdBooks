@@ -10,12 +10,6 @@
   gap: 4px;
 }
 
-.input {
-  display: flex;
-  flex-direction: column;
-  gap: 4px;
-}
-
 .back {
   display: flex;
   align-items: flex-end;
@@ -39,21 +33,10 @@
   margin: 20px 0;
 }
 
-.input {
-  flex-grow: 1;
-}
-
 .month {
   width: 200px;
   display: flex;
   justify-content: center;
-}
-
-.form-row {
-  display: flex;
-  flex-direction: row;
-  width: 100%;
-  gap: 8px;
 }
 
 .balances {
@@ -71,15 +54,8 @@
   height: 32px;
 }
 
-.label {
+.label.min-width {
   min-width: 200px;
-  font-weight: 600;
-}
-
-.box {
-  display: flex;
-  gap: 6px;
-  align-items: center;
 }
 
 .selector {
