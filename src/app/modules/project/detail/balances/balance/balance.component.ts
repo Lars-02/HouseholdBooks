@@ -1,17 +1,22 @@
-import { Component, Input, OnInit } from "@angular/core";
+import { Component, Input, OnDestroy, OnInit } from "@angular/core";
 import { BalanceService, BalanceView } from "../../../../../service/balance.service";
 import * as dayjs from "dayjs";
 import { FormControl, FormGroup, Validators } from "@angular/forms";
 import { notZero } from "../../project-detail.component";
+import { CategoryService } from "../../../../../service/category.service";
+import { Subscription } from "rxjs";
 
 @Component({
   selector: "app-balance",
   templateUrl: "./balance.component.html",
   styleUrls: ["./balance.component.css"],
 })
-export class BalanceComponent implements OnInit {
+export class BalanceComponent implements OnInit, OnDestroy {
 
   @Input() balance!: BalanceView;
+
+  categoryName?: string;
+  form!: FormGroup;
 
   get label() { return this.form?.get("label"); }
 
@@ -19,9 +24,9 @@ export class BalanceComponent implements OnInit {
 
   get date() { return this.form?.get("date"); }
 
-  form!: FormGroup;
+  private subscriptions: Subscription[] = [];
 
-  constructor(public balanceService: BalanceService) { }
+  constructor(public balanceService: BalanceService, private categoryService: CategoryService) { }
 
   ngOnInit() {
     const date = dayjs(this.balance.data.date).isValid() ? dayjs(this.balance.data.date).format("YYYY-MM-DD") : null;
@@ -41,6 +46,15 @@ export class BalanceComponent implements OnInit {
       ]),
       date: new FormControl(date, []),
     });
+
+    if (this.balance.data.category) {
+      this.categoryName = this.categoryService.getCategory(this.balance.data.category)?.data.label;
+    }
+    this.subscriptions.push(this.categoryService.categoriesChanged.subscribe(() => {
+      if (this.balance.data.category) {
+        this.categoryName = this.categoryService.getCategory(this.balance.data.category)?.data.label;
+      }
+    }))
   }
 
   saveBalance(property: "label" | "amount" | "date") {
@@ -55,5 +69,11 @@ export class BalanceComponent implements OnInit {
     }
     if (!this.balance.$id || !this.form.valid || !control.valid) { return; }
     this.balanceService.saveBalance(this.balance, property);
+  }
+
+  ngOnDestroy(): void {
+    for (const subscription of this.subscriptions) {
+      subscription.unsubscribe();
+    }
   }
 }

@@ -76,4 +76,10 @@ export class CategoryService {
     }
     await remove(ref(this.database.db, "projects/" + user.uid + "/" + this.project.$id + "/categories/" + category.$id));
   }
+
+  getCategory(id: string): Category | undefined {
+    return this.categories.find(category => {
+      return category.$id = id;
+    });
+  }
 }

@@ -8,8 +8,13 @@
              [(ngModel)]="balance.dateString">
     </div>
     <div class="box">
-      <div class="amount" [ngClass]="{ negative: balance.data.amount < 0 }">
-        {{ balance.data.amount | currency: 'EUR':'symbol' }}
+      <div class="category" *ngIf="categoryName">
+        {{ categoryName }}
+      </div>
+      <div class="amount-container">
+        <div class="amount" [ngClass]="{ negative: balance.data.amount < 0 }">
+          {{ balance.data.amount | currency: 'EUR':'symbol' }}
+        </div>
       </div>
       <div class="options">
         <div (click)="balance.edit = !balance.edit">
