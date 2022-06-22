@@ -20,6 +20,11 @@ export function notZero(): ValidatorFn {
   };
 }
 
+interface BalanceView extends Balance {
+  dateString?: string;
+  editDate: boolean;
+}
+
 @Component({
   selector: "project-detail",
   templateUrl: "./project-detail.component.html",
@@ -27,20 +32,22 @@ export function notZero(): ValidatorFn {
 })
 export class ProjectDetailComponent implements OnInit, OnDestroy {
 
-  get label() { return this.form?.get("label"); }
+  get label() { return this.createForm?.get("label"); }
 
-  get amount() { return this.form?.get("amount"); }
+  get amount() { return this.createForm?.get("amount"); }
 
-  get formattedDate() { return dayjs(this.date).format('MMMM YYYY') };
+  get formattedDate() { return dayjs(this.date).format("MMMM YYYY"); };
 
   editName: boolean = false;
+  balances: BalanceView[] = [];
   project?: Project;
-  form!: FormGroup;
+  createForm!: FormGroup;
+  dateForm!: FormGroup;
 
   private date: Dayjs = dayjs();
   private subscriptions: Subscription[] = [];
 
-  constructor(public projectService: ProjectService, public balanceService: BalanceService, private route: ActivatedRoute, private router: Router) { }
+  constructor(public projectService: ProjectService, private balanceService: BalanceService, private route: ActivatedRoute, private router: Router) { }
 
   async ngOnInit() {
     const id = this.route.snapshot.paramMap.get("projectId");
@@ -52,7 +59,7 @@ export class ProjectDetailComponent implements OnInit, OnDestroy {
       this.balanceService.setProject(this.project);
     }
 
-    this.form = new FormGroup({
+    this.createForm = new FormGroup({
       label: new FormControl(this.label, [
         Validators.required,
         Validators.minLength(1),
@@ -76,6 +83,19 @@ export class ProjectDetailComponent implements OnInit, OnDestroy {
       }
       this.balanceService.setProject(this.project);
     }));
+
+    this.subscriptions.push(this.balanceService.balancesChanged.subscribe(async () => {
+      await this.setBalances();
+    }));
+  }
+
+  private async setBalances() {
+    this.balances = this.balanceService.balances.filter(balance => {
+      const date = dayjs(balance.data.date);
+      return date.month() === this.date.month() && date.year() === this.date.year();
+    }).map(balance => {
+      return { ...balance, editDate: false };
+    });
   }
 
   saveProjectName() {
@@ -113,20 +133,33 @@ export class ProjectDetailComponent implements OnInit, OnDestroy {
         date: Date.now(),
       },
     });
-    this.form.reset();
+    this.createForm.reset();
   }
 
   async balanceChange(balance: Balance) {
     await this.balanceService.saveBalance(balance);
   }
 
+  setDate(balance: BalanceView) {
+    if (!balance.$id || !balance.dateString) { return; }
+    const date = dayjs(balance.dateString);
+    if (!date.isValid()) { return; }
+    balance.data.date = date.valueOf();
+    this.balanceService.saveBalance(balance);
+  }
+
   changeMonth(by: number) {
-    this.date = dayjs(this.date).add(by, 'months')
+    this.date = dayjs(this.date).add(by, "months");
+    this.setBalances();
   }
 
   ngOnDestroy(): void {
     for (const subscription of this.subscriptions) {
       subscription.unsubscribe();
     }
+  }
+
+  deleteBalance(balance: Balance) {
+    this.balanceService.deleteBalance(balance);
   }
 }

@@ -49,8 +49,8 @@
     </div>
 
     <div class="balances">
-      <form *ngIf="form" [formGroup]="form"
-            (ngSubmit)="form.valid && createBalance()">
+      <form *ngIf="createForm" [formGroup]="createForm"
+            (ngSubmit)="createForm.valid && createBalance()">
         <div class="balance-form">
           <div class="form-row">
             <div class="input">
@@ -89,14 +89,26 @@
           <i class="fa-solid fa-chevron-right"></i>
         </div>
       </div>
-      <ng-container *ngIf="balanceService.balances">
-        <div *ngFor="let balance of balanceService.balances" class="balance">
+      <ng-container *ngIf="balances">
+        <div *ngFor="let balance of balances" class="balance">
           <div class="label">
-            <div class="pointer" (click)="balanceService.deleteBalance(balance)">
+            <div class="pointer" (click)="deleteBalance(balance)">
               <i class="fa-solid fa-trash"></i>
             </div>
             <div>{{ balance.data.label }}</div>
             <div>{{ balance.data.date | date }}</div>
+            <input *ngIf="balance.editDate"
+                   type="date"
+                   [(ngModel)]="balance.dateString"
+                   (change)="setDate(balance)">
+            <div (click)="balance.editDate = !balance.editDate">
+              <div *ngIf="balance.editDate">
+                <i class="fa-solid fa-xmark"></i>
+              </div>
+              <div *ngIf="!balance.editDate">
+                <i class="fa-solid fa-pen"></i>
+              </div>
+            </div>
           </div>
           <div class="amount"
                [ngClass]="{ negative: (balance.data.amount ?? 0) < 0 }">{{ balance.data.amount | currency: 'EUR':'symbol' }}</div>
