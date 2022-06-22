@@ -52,4 +52,8 @@ export class BalancesComponent implements OnInit {
     });
     this.form.reset();
   }
+
+  getMonth(): number {
+    return dayjs().month();
+  }
 }

@@ -20,7 +20,7 @@
     </div>
   </div>
 
-  <form *ngIf="form" [formGroup]="form"
+  <form *ngIf="form && balanceService.getMonth.month() === getMonth()" [formGroup]="form"
         (ngSubmit)="form.valid && createBalance()">
     <div class="balance-form">
       <div class="form-row">
