@@ -28,10 +28,9 @@ export class CategoriesComponent implements OnInit, OnDestroy {
     this.categories = this.categoryService.categories
       .map(newCategory => {
         return {
-          ...newCategory, edit: this.categories
-            .some(category => {
-              return category.$id === newCategory.$id && category.edit;
-            }),
+          ...newCategory, edit: this.categories.some(category => {
+            return category.$id === newCategory.$id && category.edit;
+          }),
         };
       });
   }
