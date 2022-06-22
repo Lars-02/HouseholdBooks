@@ -45,12 +45,52 @@
     </div>
 
     <div class="categories">
+      <div *ngFor="let category of categoryService.categories" class="category">
+        <div>{{ category.data.label }}</div>
+      </div>
+      <form *ngIf="createCategoryForm" [formGroup]="createCategoryForm"
+            (ngSubmit)="createCategoryForm.valid && createCategory()">
+        <div class="category-form">
+          <div class="form-row">
+            <div class="input">
+              <label for="category-label">Label</label>
+              <input id="category-label"
+                     type="text"
+                     formControlName="label"
+                     autocomplete="off"
+                     required>
+              <app-errors [control]="categoryLabel"></app-errors>
+            </div>
 
+            <div class="input">
+              <label for="category-budget">Budget</label>
+              <input id="category-budget"
+                     type="number"
+                     formControlName="budget"
+                     required>
+              <app-errors [control]="categoryBudget"></app-errors>
+            </div>
+
+            <div class="input">
+              <label for="category-end-date">End date</label>
+              <input id="category-end-date"
+                     type="date"
+                     formControlName="endDate">
+              <app-errors [control]="categoryEndDate"></app-errors>
+            </div>
+          </div>
+
+
+          <div>
+            <button type="submit">Create category</button>
+          </div>
+        </div>
+      </form>
     </div>
 
     <div class="balances">
-      <form *ngIf="createForm" [formGroup]="createForm"
-            (ngSubmit)="createForm.valid && createBalance()">
+      <form *ngIf="createBalanceForm" [formGroup]="createBalanceForm"
+            (ngSubmit)="createBalanceForm.valid && createBalance()">
         <div class="balance-form">
           <div class="form-row">
             <div class="input">
@@ -60,7 +100,7 @@
                      formControlName="label"
                      autocomplete="off"
                      required>
-              <app-errors [control]="label"></app-errors>
+              <app-errors [control]="balanceLabel"></app-errors>
             </div>
 
             <div class="input">
@@ -69,7 +109,7 @@
                      type="number"
                      formControlName="amount"
                      required>
-              <app-errors [control]="amount"></app-errors>
+              <app-errors [control]="balanceAmount"></app-errors>
             </div>
           </div>
 
@@ -90,6 +130,7 @@
         </div>
       </div>
       <ng-container *ngIf="balances">
+        <!--TODO EDIT NAME AND AMOUNT-->
         <div *ngFor="let balance of balances" class="balance">
           <div class="box">
             <div class="label">{{ balance.data.label }}</div>

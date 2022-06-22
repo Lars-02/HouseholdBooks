@@ -13,6 +13,7 @@ import {
 } from "@angular/forms";
 import * as dayjs from "dayjs";
 import { Dayjs } from "dayjs";
+import { CategoryService } from "../../../service/category.service";
 
 export function notZero(): ValidatorFn {
   return (control: AbstractControl): ValidationErrors | null => {
@@ -32,22 +33,29 @@ interface BalanceView extends Balance {
 })
 export class ProjectDetailComponent implements OnInit, OnDestroy {
 
-  get label() { return this.createForm?.get("label"); }
+  get balanceLabel() { return this.createBalanceForm?.get("label"); }
 
-  get amount() { return this.createForm?.get("amount"); }
+  get balanceAmount() { return this.createBalanceForm?.get("amount"); }
+
+  get categoryLabel() { return this.createCategoryForm?.get("label"); }
+
+  get categoryBudget() { return this.createCategoryForm?.get("budget"); }
+
+  get categoryEndDate() { return this.createCategoryForm?.get("endDate"); }
 
   get formattedDate() { return dayjs(this.date).format("MMMM YYYY"); };
 
   editName: boolean = false;
   balances: BalanceView[] = [];
   project?: Project;
-  createForm!: FormGroup;
+  createBalanceForm!: FormGroup;
+  createCategoryForm!: FormGroup;
   dateForm!: FormGroup;
 
   private date: Dayjs = dayjs();
   private subscriptions: Subscription[] = [];
 
-  constructor(public projectService: ProjectService, private balanceService: BalanceService, private route: ActivatedRoute, private router: Router) { }
+  constructor(public projectService: ProjectService, public categoryService: CategoryService, private balanceService: BalanceService, private route: ActivatedRoute, private router: Router) { }
 
   async ngOnInit() {
     const id = this.route.snapshot.paramMap.get("projectId");
@@ -57,15 +65,16 @@ export class ProjectDetailComponent implements OnInit, OnDestroy {
     }
     if (this.project) {
       this.balanceService.setProject(this.project);
+      this.categoryService.setProject(this.project)
     }
 
-    this.createForm = new FormGroup({
-      label: new FormControl(this.label, [
+    this.createBalanceForm = new FormGroup({
+      label: new FormControl(this.balanceLabel, [
         Validators.required,
         Validators.minLength(1),
         Validators.maxLength(16),
       ]),
-      amount: new FormControl(this.amount, [
+      amount: new FormControl(this.balanceAmount, [
         notZero(),
         Validators.required,
         Validators.min(-1000),
@@ -75,12 +84,30 @@ export class ProjectDetailComponent implements OnInit, OnDestroy {
       ]),
     });
 
+    this.createCategoryForm = new FormGroup({
+      label: new FormControl(this.categoryLabel, [
+        Validators.required,
+        Validators.minLength(1),
+        Validators.maxLength(16),
+      ]),
+      budget: new FormControl(this.categoryBudget, [
+        notZero(),
+        Validators.required,
+        Validators.min(-10000),
+        Validators.max(10000),
+        Validators.minLength(1),
+        Validators.maxLength(7),
+      ]),
+      endDate: new FormControl(this.categoryEndDate, []),
+    });
+
     this.subscriptions.push(this.projectService.projectsChanged.subscribe(async () => {
       this.project = this.projectService.getProject(id);
       if (!this.project || this.project.data.archived) {
         await this.router.navigateByUrl("/");
         return;
       }
+      this.categoryService.setProject(this.project)
       this.balanceService.setProject(this.project);
     }));
 
@@ -127,18 +154,29 @@ export class ProjectDetailComponent implements OnInit, OnDestroy {
   }
 
   async createBalance() {
-    if (!this.label || !this.amount || this.amount.value === 0) {
-      return;
-    }
+    if (!this.balanceLabel || !this.balanceAmount || this.balanceAmount.value === 0) { return; }
     await this.balanceService.saveBalance({
       data: {
-        label: this.label.value,
-        amount: this.amount.value,
+        label: this.balanceLabel.value,
+        amount: this.balanceAmount.value,
         category: null,
         date: Date.now(),
       },
     });
-    this.createForm.reset();
+    this.createBalanceForm.reset();
+  }
+
+  async createCategory() {
+    if (!this.categoryLabel || !this.categoryBudget || !this.categoryEndDate) { return;}
+    const date = dayjs(this.categoryEndDate.value);
+    await this.categoryService.saveCategory({
+      data: {
+        label: this.categoryLabel.value,
+        budget: this.categoryBudget.value,
+        endDate: date.isValid() ? date.valueOf() : null,
+      },
+    });
+    this.createCategoryForm.reset();
   }
 
   async balanceChange(balance: Balance) {
