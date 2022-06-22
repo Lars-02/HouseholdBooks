@@ -7,9 +7,10 @@
              type="date"
              [(ngModel)]="balance.dateString">
     </div>
-    <div class="box"
-         [ngClass]="{ negative: (balance.data.amount ?? 0) < 0 }">
-      <div class="amount">{{ balance.data.amount | currency: 'EUR':'symbol' }}</div>
+    <div class="box">
+      <div class="amount" [ngClass]="{ negative: balance.data.amount < 0 }">
+        {{ balance.data.amount | currency: 'EUR':'symbol' }}
+      </div>
       <div class="options">
         <div (click)="balance.edit = !balance.edit">
           <i class="fa-solid fa-pen"></i>

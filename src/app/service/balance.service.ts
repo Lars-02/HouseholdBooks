@@ -6,12 +6,13 @@ import { getAuth, onAuthStateChanged } from "firebase/auth";
 import { onValue, push, ref, remove, set } from "firebase/database";
 import { Dayjs } from "dayjs";
 import * as dayjs from "dayjs";
+import { Category } from "./category.service";
 
 export interface Balance {
   $id?: string;
   data: {
     label: string;
-    amount?: number;
+    amount: number;
     category: string | null;
     date: number;
   };
@@ -108,6 +109,12 @@ export class BalanceService {
   changeMonth(by: number) {
     this.date = dayjs(this.date).add(by, "months");
     this.setBalances();
+  }
+
+  getBalanceOfCategory(category: Category): BalanceView[] {
+    return this.balances.filter(balance => {
+      return balance.data.category === category.$id;
+    });
   }
 
   reset() {

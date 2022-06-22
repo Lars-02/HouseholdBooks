@@ -1,4 +1,4 @@
-import { AfterViewInit, Component, EventEmitter, Input, OnInit, Output } from "@angular/core";
+import { Component, EventEmitter, Input, OnInit, Output } from "@angular/core";
 import { Category, CategoryService } from "../../../../../service/category.service";
 import { FormControl, FormGroup, Validators } from "@angular/forms";
 import * as dayjs from "dayjs";
@@ -12,7 +12,7 @@ export interface CategoryView extends Category {
   templateUrl: "./category.component.html",
   styleUrls: ["./category.component.css"],
 })
-export class CategoryComponent implements OnInit, AfterViewInit {
+export class CategoryComponent implements OnInit {
 
   @Input() category!: CategoryView;
   @Output() savedNewCategory = new EventEmitter<void>();
@@ -44,10 +44,6 @@ export class CategoryComponent implements OnInit, AfterViewInit {
       ]),
       endDate: new FormControl(endDate, []),
     });
-  }
-
-  ngAfterViewInit() {
-
   }
 
   saveCategory(property: "label" | "budget" | "endDate") {

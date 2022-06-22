@@ -1,22 +1,52 @@
-import { AfterViewInit, Component, Input } from "@angular/core";
+import { AfterViewInit, Component, Input, OnDestroy, OnInit } from "@angular/core";
 import { Chart, ChartConfiguration, ChartData, registerables } from "chart.js";
 import { CategoryView } from "../category.component";
+import { BalanceService } from "../../../../../../service/balance.service";
+import { Subscription } from "rxjs";
 
 @Component({
   selector: "category-chart",
   templateUrl: "./chart.component.html",
 })
-export class ChartComponent implements AfterViewInit {
+export class ChartComponent implements OnInit, OnDestroy, AfterViewInit {
 
   @Input() category!: CategoryView;
+  private subscriptions: Subscription[] = [];
+  private profit: number = 0;
+  private cost: number = 0;
 
-  constructor() { Chart.register(...registerables); }
+  constructor(private balanceService: BalanceService) { Chart.register(...registerables); }
+
+  ngOnInit() {
+    this.subscriptions.push(this.balanceService.balancesChanged.subscribe(() => {
+
+    }));
+  }
 
   ngAfterViewInit() {
+    this.setCostAndProfit();
+  }
+
+  ngOnDestroy(): void {
+    for (const subscription of this.subscriptions) {
+      subscription.unsubscribe();
+    }
+  }
+
+  private setCostAndProfit() {
+    this.profit = 0;
+    this.cost = 0;
+    for (const balance of this.balanceService.getBalanceOfCategory(this.category)) {
+      if (balance.data.amount > 0) {
+        this.profit += balance.data.amount;
+      } else if (balance.data.amount < 0) {
+        this.cost -= balance.data.amount;
+      }
+    }
     this.setChart();
   }
 
-  setChart() {
+  private setChart() {
     const ctx = (document.getElementById("chart" + this.category.$id) as HTMLCanvasElement)?.getContext("2d");
     if (!ctx) { return; }
     const data: ChartData = {
@@ -27,7 +57,7 @@ export class ChartComponent implements AfterViewInit {
       datasets: [{
         type: "bar",
         label: "Balance",
-        data: [10, 0],
+        data: [this.profit, this.cost],
         borderWidth: 2,
         backgroundColor: [
           "rgba(75, 192, 192, 0.2)",
