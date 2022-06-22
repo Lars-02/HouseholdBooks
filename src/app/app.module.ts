@@ -16,6 +16,7 @@ import { CategoriesComponent } from './modules/project/detail/categories/categor
 import { ChartComponent } from './modules/project/detail/categories/category/chart/chart.component';
 import { BalancesComponent } from './modules/project/detail/balances/balances.component';
 import { BalanceComponent } from './modules/project/detail/balances/balance/balance.component';
+import { MonthChartComponent } from './modules/project/detail/month-chart/month-chart.component';
 
 @NgModule({
   declarations: [
@@ -31,6 +32,7 @@ import { BalanceComponent } from './modules/project/detail/balances/balance/bala
     ChartComponent,
     BalancesComponent,
     BalanceComponent,
+    MonthChartComponent,
   ],
   exports: [
     AuthFormComponent,

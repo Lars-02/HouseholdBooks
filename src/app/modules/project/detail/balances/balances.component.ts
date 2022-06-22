@@ -1,7 +1,7 @@
 import { Component, OnInit } from "@angular/core";
 import * as dayjs from "dayjs";
 import { FormControl, FormGroup, Validators } from "@angular/forms";
-import { Balance, BalanceService, BalanceView } from "../../../../service/balance.service";
+import { BalanceService } from "../../../../service/balance.service";
 import { notZero } from "../project-detail.component";
 
 @Component({
@@ -18,6 +18,7 @@ export class BalancesComponent implements OnInit {
   get formattedDate() { return dayjs(this.balanceService.getMonth).format("MMMM YYYY"); };
 
   form!: FormGroup;
+  showChart: boolean = true;
 
   constructor(public balanceService: BalanceService) { }
 

@@ -1,4 +1,25 @@
 <div class="balances">
+
+  <div class="selector">
+    <div class="pointer" (click)="balanceService.changeMonth(-1)">
+      <i class="fa-solid fa-chevron-left"></i>
+    </div>
+    <div class="month">
+      {{ formattedDate }}
+    </div>
+    <div class="pointer" (click)="balanceService.changeMonth(1)">
+      <i class="fa-solid fa-chevron-right"></i>
+    </div>
+  </div>
+
+  <app-month-chart *ngIf="showChart && balanceService.balances.length > 0"></app-month-chart>
+  <div>
+    <div *ngIf="balanceService.balances.length > 0" (click)="showChart = !showChart">
+      <button *ngIf="showChart">Hide chart</button>
+      <button *ngIf="!showChart">Show chart</button>
+    </div>
+  </div>
+
   <form *ngIf="form" [formGroup]="form"
         (ngSubmit)="form.valid && createBalance()">
     <div class="balance-form">
@@ -28,19 +49,8 @@
       </div>
     </div>
   </form>
-  <div class="selector">
-    <div class="pointer" (click)="balanceService.changeMonth(-1)">
-      <i class="fa-solid fa-chevron-left"></i>
-    </div>
-    <div class="month">
-      {{ formattedDate }}
-    </div>
-    <div class="pointer" (click)="balanceService.changeMonth(1)">
-      <i class="fa-solid fa-chevron-right"></i>
-    </div>
-  </div>
+
   <ng-container *ngIf="balanceService.balances">
-    <!--TODO EDIT NAME AND AMOUNT-->
-      <app-balance *ngFor="let balance of balanceService.balances" [balance]="balance"></app-balance>
+    <app-balance *ngFor="let balance of balanceService.balances" [balance]="balance"></app-balance>
   </ng-container>
 </div>
