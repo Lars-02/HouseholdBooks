@@ -1,5 +1,5 @@
 import { AfterViewInit, Component, EventEmitter, Input, OnInit, Output } from "@angular/core";
-import { Category, CategoryService } from "../../../../service/category.service";
+import { Category, CategoryService } from "../../../../../service/category.service";
 import { FormControl, FormGroup, Validators } from "@angular/forms";
 import * as dayjs from "dayjs";
 

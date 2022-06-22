@@ -67,4 +67,8 @@ export class ProjectService {
       return project.$id === id;
     });
   }
+
+  reset() {
+    this.projects = [];
+  }
 }

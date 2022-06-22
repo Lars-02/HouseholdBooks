@@ -11,9 +11,11 @@ import { DatabaseService } from "./service/database.service";
 import { ProjectDetailComponent } from './modules/project/detail/project-detail.component';
 import { ErrorsComponent } from './modules/components/errors/errors.component';
 import { RegisterComponent } from "./modules/register/register.component";
-import { CategoryComponent } from './modules/project/detail/category/category.component';
+import { CategoryComponent } from './modules/project/detail/categories/category/category.component';
 import { CategoriesComponent } from './modules/project/detail/categories/categories.component';
-import { ChartComponent } from './modules/project/detail/category/chart/chart.component';
+import { ChartComponent } from './modules/project/detail/categories/category/chart/chart.component';
+import { BalancesComponent } from './modules/project/detail/balances/balances.component';
+import { BalanceComponent } from './modules/project/detail/balances/balance/balance.component';
 
 @NgModule({
   declarations: [
@@ -27,6 +29,8 @@ import { ChartComponent } from './modules/project/detail/category/chart/chart.co
     CategoryComponent,
     CategoriesComponent,
     ChartComponent,
+    BalancesComponent,
+    BalanceComponent,
   ],
   exports: [
     AuthFormComponent,

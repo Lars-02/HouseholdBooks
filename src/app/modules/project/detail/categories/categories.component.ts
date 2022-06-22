@@ -1,7 +1,7 @@
 import { Component, OnDestroy, OnInit } from "@angular/core";
 import { Subscription } from "rxjs";
 import { CategoryService } from "../../../../service/category.service";
-import { CategoryView } from "../category/category.component";
+import { CategoryView } from "./category/category.component";
 
 @Component({
   selector: "app-categories",

@@ -1,0 +1,25 @@
+<div class="balance">
+  <div class="box">
+    <div class="label min-width">{{ balance.data.label }}</div>
+    <div>{{ balance.data.date | date }}</div>
+    <input *ngIf="balance.editDate"
+           type="date"
+           [(ngModel)]="balance.dateString"
+           (change)="setDate()">
+    <div (click)="balance.editDate = !balance.editDate">
+      <div *ngIf="balance.editDate">
+        <i class="fa-solid fa-xmark"></i>
+      </div>
+      <div *ngIf="!balance.editDate">
+        <i class="fa-solid fa-pen"></i>
+      </div>
+    </div>
+  </div>
+  <div class="box"
+       [ngClass]="{ negative: (balance.data.amount ?? 0) < 0 }">
+    <div class="amount">{{ balance.data.amount | currency: 'EUR':'symbol' }}</div>
+    <div class="pointer" (click)="balanceService.deleteBalance(balance)">
+      <i class="fa-solid fa-trash"></i>
+    </div>
+  </div>
+</div>

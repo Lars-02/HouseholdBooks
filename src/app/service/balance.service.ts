@@ -4,6 +4,8 @@ import { Subject } from "rxjs";
 import { Project } from "./project.service";
 import { getAuth, onAuthStateChanged } from "firebase/auth";
 import { onValue, push, ref, remove, set } from "firebase/database";
+import { Dayjs } from "dayjs";
+import * as dayjs from "dayjs";
 
 export interface Balance {
   $id?: string;
@@ -15,14 +17,24 @@ export interface Balance {
   };
 }
 
+export interface BalanceView extends Balance {
+  dateString?: string;
+  editDate: boolean;
+}
+
 @Injectable({
   providedIn: "root",
 })
 export class BalanceService {
 
   private project?: Project;
-  public balances: Balance[] = [];
+  private allBalances: Balance[] = [];
+  private date: Dayjs = dayjs();
+
+  public balances: BalanceView[] = [];
   public balancesChanged: Subject<void> = new Subject();
+
+  get getMonth() { return this.date; }
 
   constructor(private database: DatabaseService) { }
 
@@ -40,18 +52,33 @@ export class BalanceService {
         return;
       }
       onValue(ref(this.database.db, "projects/" + user.uid + "/" + this.project.$id + "/balances"), (snapshot => {
-        this.balances = [];
+        this.allBalances = [];
         snapshot.forEach(child => {
-          this.balances.push({
+          this.allBalances.push({
             $id: child.key ?? undefined,
             data: {
               ...child.val(),
             },
           });
         });
-        this.balancesChanged.next();
+        this.setBalances();
       }));
     });
+  }
+
+  private setBalances() {
+    this.balances = this.allBalances
+      .filter(balance => {
+        const date = dayjs(balance.data.date);
+        return date.month() === this.date.month() && date.year() === this.date.year();
+      })
+      .map(balance => {
+        return { ...balance, editDate: false };
+      })
+      .sort((first, last) => {
+        return last.data.date - first.data.date;
+      });
+    this.balancesChanged.next();
   }
 
   async saveBalance(balance: Balance) {
@@ -72,5 +99,17 @@ export class BalanceService {
       return;
     }
     await remove(ref(this.database.db, "projects/" + user.uid + "/" + this.project.$id + "/balances/" + balance.$id));
+  }
+
+  changeMonth(by: number) {
+    this.date = dayjs(this.date).add(by, "months");
+    this.setBalances();
+  }
+
+  reset() {
+    this.project = undefined;
+    this.allBalances = [];
+    this.balances = [];
+    this.date = dayjs();
   }
 }

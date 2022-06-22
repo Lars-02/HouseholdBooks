@@ -39,7 +39,7 @@ export class AuthService {
   async logout() {
     await getAuth().signOut();
     await getAuth().updateCurrentUser(null);
-    this.project.projects = [];
-    this.balance.balances = [];
+    this.project.reset();
+    this.balance.reset();
   }
 }
