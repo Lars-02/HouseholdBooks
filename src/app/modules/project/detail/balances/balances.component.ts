@@ -11,25 +11,24 @@ import { notZero } from "../project-detail.component";
 })
 export class BalancesComponent implements OnInit {
 
-  get balanceLabel() { return this.createBalanceForm?.get("label"); }
+  get label() { return this.form?.get("label"); }
 
-  get balanceAmount() { return this.createBalanceForm?.get("amount"); }
+  get amount() { return this.form?.get("amount"); }
 
   get formattedDate() { return dayjs(this.balanceService.getMonth).format("MMMM YYYY"); };
 
-  createBalanceForm!: FormGroup;
-  dateForm!: FormGroup;
+  form!: FormGroup;
 
   constructor(public balanceService: BalanceService) { }
 
   ngOnInit() {
-    this.createBalanceForm = new FormGroup({
-      label: new FormControl(this.balanceLabel, [
+    this.form = new FormGroup({
+      label: new FormControl(this.label, [
         Validators.required,
         Validators.minLength(1),
         Validators.maxLength(16),
       ]),
-      amount: new FormControl(this.balanceAmount, [
+      amount: new FormControl(this.amount, [
         notZero(),
         Validators.required,
         Validators.min(-1000),
@@ -41,15 +40,15 @@ export class BalancesComponent implements OnInit {
   }
 
   async createBalance() {
-    if (!this.balanceLabel || !this.balanceAmount || this.balanceAmount.value === 0) { return; }
+    if (!this.label || !this.amount || this.amount.value === 0) { return; }
     await this.balanceService.saveBalance({
       data: {
-        label: this.balanceLabel.value,
-        amount: this.balanceAmount.value,
+        label: this.label.value,
+        amount: this.amount.value,
         category: null,
         date: Date.now(),
       },
     });
-    this.createBalanceForm.reset();
+    this.form.reset();
   }
 }

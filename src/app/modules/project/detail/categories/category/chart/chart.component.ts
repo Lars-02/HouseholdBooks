@@ -39,7 +39,7 @@ export class ChartComponent implements AfterViewInit {
         ],
       }, {
         type: "line",
-        label: "Maximum budget",
+        label: "Budget",
         data: [this.category.data.budget, this.category.data.budget],
         borderWidth: 2,
         pointStyle: "line",

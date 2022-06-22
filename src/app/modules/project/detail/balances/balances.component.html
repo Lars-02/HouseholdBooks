@@ -1,6 +1,6 @@
 <div class="balances">
-  <form *ngIf="createBalanceForm" [formGroup]="createBalanceForm"
-        (ngSubmit)="createBalanceForm.valid && createBalance()">
+  <form *ngIf="form" [formGroup]="form"
+        (ngSubmit)="form.valid && createBalance()">
     <div class="balance-form">
       <div class="form-row">
         <div class="input">
@@ -10,7 +10,7 @@
                  formControlName="label"
                  autocomplete="off"
                  required>
-          <app-errors [control]="balanceLabel"></app-errors>
+          <app-errors [control]="label"></app-errors>
         </div>
 
         <div class="input">
@@ -19,11 +19,11 @@
                  type="number"
                  formControlName="amount"
                  required>
-          <app-errors [control]="balanceAmount"></app-errors>
+          <app-errors [control]="amount"></app-errors>
         </div>
       </div>
 
-      <div *ngIf="createBalanceForm.valid">
+      <div *ngIf="form.valid">
         <button type="submit">Create balance</button>
       </div>
     </div>

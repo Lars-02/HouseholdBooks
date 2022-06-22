@@ -19,7 +19,7 @@ export interface Balance {
 
 export interface BalanceView extends Balance {
   dateString?: string;
-  editDate: boolean;
+  edit: boolean;
 }
 
 @Injectable({
@@ -51,7 +51,7 @@ export class BalanceService {
       if (!user || !this.project) {
         return;
       }
-      onValue(ref(this.database.db, "projects/" + user.uid + "/" + this.project.$id + "/balances"), (snapshot => {
+      onValue(ref(this.database.db, `projects/${user.uid}/${this.project.$id}/balances`), (snapshot => {
         this.allBalances = [];
         snapshot.forEach(child => {
           this.allBalances.push({
@@ -73,7 +73,7 @@ export class BalanceService {
         return date.month() === this.date.month() && date.year() === this.date.year();
       })
       .map(balance => {
-        return { ...balance, editDate: false };
+        return { ...balance, edit: false };
       })
       .sort((first, last) => {
         return last.data.date - first.data.date;
@@ -81,15 +81,19 @@ export class BalanceService {
     this.balancesChanged.next();
   }
 
-  async saveBalance(balance: Balance) {
+  async saveBalance(balance: Balance, property?: "label" | "amount" | "date") {
     const user = getAuth().currentUser;
     if (!user || !this.project || !this.project.$id) {
       return;
     }
     if (balance.$id) {
-      await set(ref(this.database.db, "projects/" + user.uid + "/" + this.project.$id + "/balances/" + balance.$id), balance.data);
+      if (property) {
+        await set(ref(this.database.db, `projects/${user.uid}/${this.project.$id}/balances/${balance.$id}/${property}`), balance.data[property]);
+      } else {
+        await set(ref(this.database.db, `projects/${user.uid}/${this.project.$id}/balances/${balance.$id}`), balance.data);
+      }
     } else {
-      push(ref(this.database.db, "projects/" + user.uid + "/" + this.project.$id + "/balances"), balance.data);
+      push(ref(this.database.db, `projects/${user.uid}/${this.project.$id}/balances`), balance.data);
     }
   }
 
@@ -98,7 +102,7 @@ export class BalanceService {
     if (!user || !this.project || !this.project.$id || !balance.$id) {
       return;
     }
-    await remove(ref(this.database.db, "projects/" + user.uid + "/" + this.project.$id + "/balances/" + balance.$id));
+    await remove(ref(this.database.db, `projects/${user.uid}/${this.project.$id}/balances/${balance.$id}`));
   }
 
   changeMonth(by: number) {
